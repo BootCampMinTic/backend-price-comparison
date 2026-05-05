@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Ports;
@@ -8,15 +9,21 @@ using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
 namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories
 {
-    internal class ClientRepository(ClientDbContext context) : IClientRepository
+    internal class ClientRepository(
+        ClientDbContext context,
+        ILogger<ClientRepository> logger) : IClientRepository
     {
         public async Task<Result<VoidResult, Error>> CreateClientLegalAsync(ClientLegalPosEntity request, CancellationToken cancellationToken)
         {
             await context.ClientLegalPos.AddAsync(request, cancellationToken);
             var saved = await context.SaveChangesAsync(cancellationToken) > 0;
             if (!saved)
+            {
+                logger.LogWarning("Failed to persist legal client with document {DocumentNumber}", request.DocumentNumber);
                 return ClientErrorBuilder.ClientLegalCreationException();
+            }
 
+            logger.LogInformation("Legal client created with id {ClientId}", request.Id);
             return VoidResult.Instance;
         }
 
@@ -25,8 +32,12 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
             await context.ClientNaturalPos.AddAsync(request, cancellationToken);
             var saved = await context.SaveChangesAsync(cancellationToken) > 0;
             if (!saved)
+            {
+                logger.LogWarning("Failed to persist natural client with document {DocumentNumber}", request.DocumentNumber);
                 return ClientErrorBuilder.ClientNaturalCreationException();
+            }
 
+            logger.LogInformation("Natural client created with id {ClientId}", request.Id);
             return VoidResult.Instance;
         }
 
@@ -39,7 +50,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
                 .ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
+            {
+                logger.LogInformation("No legal clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
+            }
 
             return entities;
         }
@@ -53,7 +67,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
                 .ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
+            {
+                logger.LogInformation("No natural clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
+            }
 
             return entities;
         }
@@ -72,7 +89,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
             };
 
             if (client is null)
+            {
+                logger.LogInformation("Client not found by id {ClientId} (type {ClientType})", id, type);
                 return ClientErrorBuilder.ClientNotFoundException(id);
+            }
 
             return client;
         }
@@ -91,7 +111,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
             };
 
             if (client is null)
+            {
+                logger.LogInformation("Client not found by document {DocumentNumber} (type {ClientType})", documentNumber, type);
                 return ClientErrorBuilder.ClientNotFoundException(documentNumber);
+            }
 
             return client;
         }
