@@ -113,12 +113,35 @@ Archivos a incluir:
 - Si el hook de pre-commit falla: **NO uses `--amend`**. Arregla el problema, re-stagea y crea un commit nuevo.
 - Después del commit ejecuta `git status` y `git log -1` para confirmar.
 
-### 8. Sugiere el tag (NO lo crees automáticamente)
+### 8. Push automático al remoto
+
+Después de un commit exitoso:
+
+1. Detecta la rama actual: `git branch --show-current`
+2. Detecta si tiene upstream configurado:
+   ```bash
+   git rev-parse --abbrev-ref --symbolic-full-name @{u}
+   ```
+3. **Push según el caso:**
+   - **Con upstream:** `git push`
+   - **Sin upstream:** `git push -u origin <rama-actual>`
+4. **Si la rama actual es `main` o `master`**, antes de pushear muestra una advertencia:
+   ```
+   ⚠️  Vas a pushear directo a main. ¿Continuar? (auto-yes en este flujo)
+   ```
+   Procede igual (el usuario invocó el comando sabiendo que pushea), pero deja el aviso visible en el output.
+5. **Nunca** uses `--force`, `--force-with-lease`, ni `--no-verify`. Si el push es rechazado por non-fast-forward, **detente** y avisa al usuario para que decida (`git pull --rebase` o resolver manualmente).
+6. **No pushees tags automáticamente** — solo el commit.
+
+Si el push falla por cualquier razón, reporta el error completo y deja el commit local intacto (no lo deshagas).
+
+### 9. Sugiere el tag (NO lo crees automáticamente)
 
 Termina con:
 
 ```
 ✅ Commit creado: <hash>
+✅ Push a <remote>/<rama> exitoso
 
 Para tagear esta versión ejecuta:
   git tag -a v1.3.0 -m "Release 1.3.0"
@@ -134,8 +157,10 @@ Si el usuario pasó argumentos (`$ARGUMENTS`):
 
 ## Restricciones
 
-- **Nunca** hagas `git push` automáticamente.
+- **Nunca** ejecutes `git push --force` ni `--force-with-lease` automáticamente.
 - **Nunca** ejecutes con `--no-verify` salvo petición explícita.
 - **Nunca** crees commits vacíos.
+- **Nunca** pushees tags automáticamente (solo el commit, los tags requieren confirmación).
 - Si no hay cambios, dilo claramente y termina.
 - Si detectas secretos en el diff (API keys, passwords, tokens), **detente** y avisa al usuario antes de commitear.
+- Si el push es rechazado (non-fast-forward, permission denied, etc.), **no intentes resolverlo automáticamente**: reporta el error y deja al usuario decidir.
