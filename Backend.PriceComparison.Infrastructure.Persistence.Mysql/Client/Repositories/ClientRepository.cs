@@ -13,8 +13,8 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
         public async Task<Result<VoidResult, Error>> CreateClientLegalAsync(ClientLegalPosEntity request, CancellationToken cancellationToken)
         {
             await context.ClientLegalPos.AddAsync(request, cancellationToken);
-            var result = await context.SaveChangesAsync() > 0;
-            if (!result)
+            var saved = await context.SaveChangesAsync(cancellationToken) > 0;
+            if (!saved)
                 return ClientErrorBuilder.ClientLegalCreationException();
 
             return VoidResult.Instance;
@@ -23,8 +23,8 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
         public async Task<Result<VoidResult, Error>> CreateClientNaturalAsync(ClientNaturalPosEntity request, CancellationToken cancellationToken)
         {
             await context.ClientNaturalPos.AddAsync(request, cancellationToken);
-            var result = await context.SaveChangesAsync() > 0;
-            if (!result)
+            var saved = await context.SaveChangesAsync(cancellationToken) > 0;
+            if (!saved)
                 return ClientErrorBuilder.ClientNaturalCreationException();
 
             return VoidResult.Instance;
@@ -33,8 +33,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
         public async Task<Result<IEnumerable<ClientLegalPosEntity>, Error>> GetAllLegalAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             var entities = await context.ClientLegalPos
+                .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).ToListAsync(cancellationToken);
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
@@ -45,8 +47,10 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
         public async Task<Result<IEnumerable<ClientNaturalPosEntity>, Error>> GetAllNaturalAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             var entities = await context.ClientNaturalPos
+                .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize).ToListAsync(cancellationToken);
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
@@ -56,70 +60,40 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
 
         public async Task<Result<ClientEntity, Error>> GetByIdAsync(int id, ClientType type, CancellationToken cancellationToken)
         {
-            ClientEntity client = new ClientEntity();
+            ClientEntity? client = type switch
+            {
+                ClientType.Legal => await context.ClientLegalPos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.Id == id, cancellationToken),
+                ClientType.Natural => await context.ClientNaturalPos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.Id == id, cancellationToken),
+                _ => null
+            };
 
-            if (type == ClientType.Legal && await LegalClientExists(id, cancellationToken))
-            {
-                client = await context.ClientLegalPos.FirstAsync(c => c.Id == id);
-            }
-            else if(type == ClientType.Natural && await NaturalClientExists(id, cancellationToken))
-            {
-                client = await context.ClientNaturalPos.FirstAsync(c => c.Id == id);
-            }
-            else
-            {
+            if (client is null)
                 return ClientErrorBuilder.ClientNotFoundException(id);
-            }
 
             return client;
         }
 
         public async Task<Result<ClientEntity, Error>> GetByDocumentNumberAsync(string documentNumber, ClientType type, CancellationToken cancellationToken)
         {
-            ClientEntity client = new ClientEntity();
+            ClientEntity? client = type switch
+            {
+                ClientType.Legal => await context.ClientLegalPos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.DocumentNumber == documentNumber, cancellationToken),
+                ClientType.Natural => await context.ClientNaturalPos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.DocumentNumber == documentNumber, cancellationToken),
+                _ => null
+            };
 
-            if (type == ClientType.Legal && await LegalClientExists(documentNumber, cancellationToken))
-            {
-                client = await context.ClientLegalPos.FirstAsync(c => c.DocumentNumber == documentNumber);
-            }
-            else if (type == ClientType.Natural && await NaturalClientExists(documentNumber, cancellationToken))
-            {
-                client = await context.ClientNaturalPos.FirstAsync(c => c.DocumentNumber == documentNumber);
-            }
-            else
-            {
+            if (client is null)
                 return ClientErrorBuilder.ClientNotFoundException(documentNumber);
-            }
 
             return client;
         }
-
-        private async Task<bool> LegalClientExists(int id, CancellationToken cancellationToken)
-        {
-            return await context.ClientLegalPos
-                .AsNoTracking()
-                .AnyAsync(c => c.Id == id, cancellationToken);
-        }
-
-        private async Task<bool> NaturalClientExists(int id, CancellationToken cancellationToken)
-        {
-            return await context.ClientNaturalPos
-                .AsNoTracking()
-                .AnyAsync(c => c.Id == id, cancellationToken);
-        }
-
-        private async Task<bool> LegalClientExists(string documentNumber, CancellationToken cancellationToken)
-        {
-            return await context.ClientLegalPos
-                .AsNoTracking()
-                .AnyAsync(c => c.DocumentNumber == documentNumber, cancellationToken);
-        }
-
-        private async Task<bool> NaturalClientExists(string documentNumber, CancellationToken cancellationToken)
-        {
-            return await context.ClientNaturalPos
-                .AsNoTracking()
-                .AnyAsync(c => c.DocumentNumber == documentNumber, cancellationToken);
-        }   
     }
 }
