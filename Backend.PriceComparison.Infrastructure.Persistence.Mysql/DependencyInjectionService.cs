@@ -23,7 +23,7 @@ public static class DependencyInjectionService
             services.AddSingleton<ICacheService, InMemoryCacheService>();
             services.AddScoped<IClientRepository, MockClientRepository>();
             services.AddScoped<IDocumentTypeRepository, MockDocumentTypeRepository>();
-            services.AddTransient<IMessageProvider, MessageProvider>();
+            services.AddSingleton<IMessageProvider, MessageProvider>();
 
             return services;
         }
@@ -48,7 +48,7 @@ public static class DependencyInjectionService
             _ => ConnectionMultiplexer.Connect(redisSettings.ConnectionString));
         services.AddSingleton<ICacheService, RedisCacheService>();
 
-        services.AddTransient<IMessageProvider, MessageProvider>();
+        services.AddSingleton<IMessageProvider, MessageProvider>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
         
