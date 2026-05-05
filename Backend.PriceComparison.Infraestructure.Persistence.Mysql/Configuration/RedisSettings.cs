@@ -1,4 +1,4 @@
-namespace Backend.PriceComparison.Api.Configuration;
+namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Configuration;
 
 public class RedisSettings
 {

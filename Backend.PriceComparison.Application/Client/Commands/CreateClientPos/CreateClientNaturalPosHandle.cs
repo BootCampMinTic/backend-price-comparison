@@ -2,8 +2,7 @@ using AutoMapper;
 using MediatR;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
-using Backend.PriceComparison.Application.Common.Interfaces;
-using Backend.PriceComparison.Domain.ClientPos.DomainServices;
+using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
 
 namespace Backend.PriceComparison.Application.Client.Commands.CreateClientPos;

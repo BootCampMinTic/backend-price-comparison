@@ -1,9 +1,7 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
-using Backend.PriceComparison.Application.Client.Errors.Client;
-using Backend.PriceComparison.Domain.ClientPos.DomainServices;
+using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
 using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
 using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;

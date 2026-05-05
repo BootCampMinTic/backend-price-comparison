@@ -3,7 +3,7 @@ using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
 using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
 
-namespace Backend.PriceComparison.Domain.ClientPos.DomainServices
+namespace Backend.PriceComparison.Domain.Ports
 {
     public interface IClientDomainService
     {

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Backend.PriceComparison.Api.Common.Extensions;
 using Backend.PriceComparison.Application.Client.Dtos;
 using Backend.PriceComparison.Application.Client.Queries.DocumentType;
-using Backend.PriceComparison.Domain.ClientPos.Entities;
 
 namespace Backend.PriceComparison.Api.Endpoints;
 
@@ -17,7 +16,7 @@ public static class DocumentTypeEndpoints
         group.MapGet("document-type", GetAllDocumentTypes)
             .WithName("GetAllDocumentTypes")
             .WithSummary("Get all document types")
-            .Produces<ApiResponseDto<IEnumerable<DocumentTypeEntity>>>(StatusCodes.Status200OK)
+            .Produces<ApiResponseDto<IEnumerable<DocumentTypeDto>>>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);

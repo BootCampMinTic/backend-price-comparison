@@ -1,28 +1,16 @@
 using Backend.PriceComparison.Api.Common.Configurations;
 using Backend.PriceComparison.Application;
 using Backend.PriceComparison.Infraestructure.Persistence.Mysql;
-using Backend.PriceComparison.Api.Configuration;
 using Backend.PriceComparison.Api.Endpoints;
 using Backend.PriceComparison.Api.Extensions;
 using Backend.PriceComparison.Api.Middleware;
-using Backend.PriceComparison.Api.Services;
-using Backend.PriceComparison.Application.Common.Interfaces;
 using Scalar.AspNetCore;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-
-builder.Services.Configure<RedisSettings>(config.GetSection("Redis"));
-
-var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION")
-    ?? config.GetSection("Redis:ConnectionString").Value;
-
-builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString!));
-builder.Services.AddSingleton<ICacheService, RedisCacheService>();
 
 builder.Services
   .AddApplication()

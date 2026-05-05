@@ -1,5 +1,5 @@
 using Backend.PriceComparison.Domain.Common.Results.Errors;
-using Backend.PriceComparison.Application.Client.Errors.Client;
+using Backend.PriceComparison.Domain.Common.Results.Errors;
 using System.Net;
 
 namespace Backend.PriceComparison.Domain.Test;

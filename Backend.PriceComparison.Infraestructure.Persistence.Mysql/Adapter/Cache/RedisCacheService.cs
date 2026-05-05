@@ -1,10 +1,9 @@
-using StackExchange.Redis;
 using System.Text.Json;
-using Backend.PriceComparison.Application.Common.Interfaces;
-using Microsoft.Extensions.Options;
-using Backend.PriceComparison.Api.Configuration;
+using Backend.PriceComparison.Domain.Ports;
+using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Configuration;
+using StackExchange.Redis;
 
-namespace Backend.PriceComparison.Api.Services;
+namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter.Cache;
 
 public class RedisCacheService : ICacheService
 {
@@ -14,11 +13,11 @@ public class RedisCacheService : ICacheService
 
     public RedisCacheService(
         IConnectionMultiplexer connectionMultiplexer,
-        IOptions<RedisSettings> redisSettings)
+        RedisSettings redisSettings)
     {
         _connectionMultiplexer = connectionMultiplexer;
         _database = _connectionMultiplexer.GetDatabase();
-        _defaultExpirationMinutes = redisSettings.Value.CacheExpirationMinutes;
+        _defaultExpirationMinutes = redisSettings.CacheExpirationMinutes;
     }
 
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)

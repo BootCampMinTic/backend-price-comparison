@@ -3,8 +3,7 @@ using MediatR;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Application.Client.Dtos;
-using Backend.PriceComparison.Domain.ClientPos.DomainServices;
-using Backend.PriceComparison.Application.Common.Interfaces;
+using Backend.PriceComparison.Domain.Ports;
 
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 

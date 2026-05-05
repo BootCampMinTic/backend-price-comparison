@@ -14,12 +14,11 @@ COPY ["Backend.PriceComparison.Domain/Backend.PriceComparison.Domain.csproj", "B
 COPY ["Backend.PriceComparison.Infraestructure.Persistence.Mysql/Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj", "Backend.PriceComparison.Infraestructure.Persistence.Mysql/"]
 RUN dotnet restore "./Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj"
 COPY . .
-WORKDIR "/src/Backend.PriceComparison.Api"
-RUN dotnet build "./Backend.PriceComparison.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
+RUN dotnet build "./Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Backend.PriceComparison.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
+RUN dotnet publish "./Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM base AS final
 WORKDIR /app

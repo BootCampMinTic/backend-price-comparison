@@ -1,4 +1,4 @@
-namespace Backend.PriceComparison.Application.Common.Interfaces;
+namespace Backend.PriceComparison.Domain.Ports;
 
 public interface ICacheService
 {

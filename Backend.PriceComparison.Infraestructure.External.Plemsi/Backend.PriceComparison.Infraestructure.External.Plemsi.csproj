@@ -15,12 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backend.PriceComparison.Domain\Backend.PriceComparison.Domain.csproj" />
-    <ProjectReference Include="..\Backend.PriceComparison.Infraestructure.Persistence.Mysql\Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Backend.PriceComparison.Application\Backend.PriceComparison.Application.csproj" />
-    <ProjectReference Include="..\Backend.PriceComparison.Domain\Backend.PriceComparison.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
