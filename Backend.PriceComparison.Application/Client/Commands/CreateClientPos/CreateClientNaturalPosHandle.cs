@@ -17,13 +17,18 @@ public class CreateClientNaturalPosHandle(
         CreateClientNaturalPosCommand request,
         CancellationToken cancellationToken)
     {
+        // MOCK: Simular creación exitosa de cliente natural
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
         var entity = _mapper.Map<ClientNaturalPosEntity>(request);
         var result = await _clientRepository.CreateClientNaturalAsync(entity, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 
         await _cacheService.RemoveByPrefixAsync("clients:natural", cancellationToken);
-
         return result.Value!;
+        */
+
+        return VoidResult.Instance;
     }
 }

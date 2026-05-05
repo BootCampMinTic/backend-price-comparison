@@ -17,8 +17,14 @@ IClientRepository _clientRepository,
         GetClientByDocumentNumberQuery request,
  CancellationToken cancellationToken)
     {
-        var cacheKey = $"client:{request.Type}:document:{request.DocumentNumber}";
+        // MOCK: Respuesta simulada para cliente por número de documento
+        var mockClient = request.Type.ToString() == "Natural"
+            ? new ClientDto { Id = 1, Name = "Juan", LastName = "Perez", DocumentNumber = request.DocumentNumber, DocumentTypeId = 1 }
+            : new ClientDto { Id = 1, CompanyName = "Empresa ABC", DocumentNumber = request.DocumentNumber, DocumentTypeId = 3, VerificationDigit = 1 };
 
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
+        var cacheKey = $"client:{request.Type}:document:{request.DocumentNumber}";
         var cachedClient = await _cacheService.GetAsync<ClientDto>(cacheKey, cancellationToken);
         if (cachedClient != null)
             return cachedClient;
@@ -28,9 +34,9 @@ IClientRepository _clientRepository,
             return result.Error!;
 
         var clientDto = _mapper.Map<ClientDto>(result.Value);
-
         await _cacheService.SetAsync(cacheKey, clientDto, null, cancellationToken);
+        */
 
-        return clientDto;
+        return mockClient;
     }
 }

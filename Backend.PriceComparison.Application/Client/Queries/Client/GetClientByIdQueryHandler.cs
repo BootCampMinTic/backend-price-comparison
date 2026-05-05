@@ -17,8 +17,14 @@ public class GetClientByIdQueryHandler(
         GetClientByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"client:{request.Type}:{request.Id}";
+        // MOCK: Respuesta simulada para cliente por ID
+        var mockClient = request.Type.ToString() == "Natural"
+            ? new ClientDto { Id = request.Id, Name = "Juan", LastName = "Perez", DocumentNumber = "12345678", DocumentTypeId = 1 }
+            : new ClientDto { Id = request.Id, CompanyName = "Empresa ABC", DocumentNumber = "9001234567", DocumentTypeId = 3, VerificationDigit = 1 };
 
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
+        var cacheKey = $"client:{request.Type}:{request.Id}";
         var cachedClient = await _cacheService.GetAsync<ClientDto>(cacheKey, cancellationToken);
         if (cachedClient != null)
             return cachedClient;
@@ -28,9 +34,9 @@ public class GetClientByIdQueryHandler(
             return result.Error!;
 
         var clientDto = _mapper.Map<ClientDto>(result.Value);
-
         await _cacheService.SetAsync(cacheKey, clientDto, null, cancellationToken);
+        */
 
-        return clientDto;
+        return mockClient;
     }
 }

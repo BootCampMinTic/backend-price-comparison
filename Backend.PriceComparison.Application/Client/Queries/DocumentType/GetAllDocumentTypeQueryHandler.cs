@@ -15,8 +15,17 @@ ICacheService _cacheService)
     GetAllDocumentTypeQuery request,
     CancellationToken cancellationToken)
     {
-        var cacheKey = "documenttypes:all";
+        // MOCK: Respuesta simulada para document types
+        var mockDocumentTypes = new List<DocumentTypeDto>
+        {
+            new() { Id = 1, Name = "Cedula de ciudadania", DocumentType = "CC", HelpTextHeader = "Ingrese su cedula", HelpText = "Numero de identificacion", Regex = "^[0-9]{6,10}$", Fields = "numero" },
+            new() { Id = 2, Name = "Cedula de extranjeria", DocumentType = "CE", HelpTextHeader = "Ingrese su cedula de extranjeria", HelpText = "Numero de identificacion extranjera", Regex = "^[0-9]{6,10}$", Fields = "numero" },
+            new() { Id = 3, Name = "NIT", DocumentType = "NIT", HelpTextHeader = "Ingrese el NIT", HelpText = "Numero de identificacion tributaria", Regex = "^[0-9]{9,10}$", Fields = "numero,dv" }
+        };
 
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
+        var cacheKey = "documenttypes:all";
         var cachedDocumentTypes = await _cacheService.GetAsync<IEnumerable<DocumentTypeDto>>(cacheKey, cancellationToken);
         if (cachedDocumentTypes != null)
             return new ApiResponseDto<IEnumerable<DocumentTypeDto>>(cachedDocumentTypes.ToList());
@@ -37,7 +46,8 @@ ICacheService _cacheService)
         }).ToList();
 
         await _cacheService.SetAsync(cacheKey, documentTypes, null, cancellationToken);
+        */
 
-        return new ApiResponseDto<IEnumerable<DocumentTypeDto>>(documentTypes);
+        return new ApiResponseDto<IEnumerable<DocumentTypeDto>>(mockDocumentTypes);
     }
 }

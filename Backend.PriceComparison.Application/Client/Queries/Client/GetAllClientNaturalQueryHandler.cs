@@ -17,8 +17,16 @@ IClientRepository _clientRepository,
   GetAllClientNaturalQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"clients:natural:page:{request.PageNumber}:size:{request.PageSize}";
+        // MOCK: Respuesta simulada para clientes naturales
+        var mockClients = new List<ClientDto>
+        {
+            new() { Id = 1, Name = "Juan", LastName = "Perez", DocumentNumber = "12345678", DocumentTypeId = 1 },
+            new() { Id = 2, Name = "Maria", LastName = "Gomez", DocumentNumber = "87654321", DocumentTypeId = 1 }
+        };
 
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
+        var cacheKey = $"clients:natural:page:{request.PageNumber}:size:{request.PageSize}";
         var cachedClients = await _cacheService.GetAsync<IEnumerable<ClientDto>>(cacheKey, cancellationToken);
         if (cachedClients != null)
             return cachedClients.ToList();
@@ -28,9 +36,9 @@ IClientRepository _clientRepository,
             return result.Error!;
 
         var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(result.Value).ToList();
-
         await _cacheService.SetAsync(cacheKey, clientDtos, null, cancellationToken);
+        */
 
-        return clientDtos;
+        return mockClients;
     }
 }

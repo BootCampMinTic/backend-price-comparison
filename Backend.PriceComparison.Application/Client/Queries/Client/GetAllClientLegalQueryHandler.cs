@@ -17,8 +17,16 @@ public class GetAllClientLegalQueryHandler(
         GetAllClientLegalQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"clients:legal:page:{request.PageNumber}:size:{request.PageSize}";
+        // MOCK: Respuesta simulada para clientes legales
+        var mockClients = new List<ClientDto>
+        {
+            new() { Id = 1, CompanyName = "Empresa ABC", DocumentNumber = "9001234567", DocumentTypeId = 3, VerificationDigit = 1 },
+            new() { Id = 2, CompanyName = "Empresa XYZ", DocumentNumber = "9009876543", DocumentTypeId = 3, VerificationDigit = 7 }
+        };
 
+        // Ejemplo de cómo sería con persistencia (comentado):
+        /*
+        var cacheKey = $"clients:legal:page:{request.PageNumber}:size:{request.PageSize}";
         var cachedClients = await _cacheService.GetAsync<IEnumerable<ClientDto>>(cacheKey, cancellationToken);
         if (cachedClients != null)
             return cachedClients.ToList();
@@ -28,9 +36,9 @@ public class GetAllClientLegalQueryHandler(
             return result.Error!;
 
         var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(result.Value).ToList();
-
         await _cacheService.SetAsync(cacheKey, clientDtos, null, cancellationToken);
+        */
 
-        return clientDtos;
+        return mockClients;
     }
 }

@@ -7,6 +7,7 @@ using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Configuration;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Mock;
 using StackExchange.Redis;
 
 namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql;
@@ -15,6 +16,18 @@ public static class DependencyInjectionService
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        var useMockInfrastructure = bool.TryParse(configuration["UseMockInfrastructure"], out var parsedUseMockInfrastructure)
+            && parsedUseMockInfrastructure;
+        if (useMockInfrastructure)
+        {
+            services.AddSingleton<ICacheService, InMemoryCacheService>();
+            services.AddScoped<IClientRepository, MockClientRepository>();
+            services.AddScoped<IDocumentTypeRepository, MockDocumentTypeRepository>();
+            services.AddTransient<IMessageProvider, MessageProvider>();
+
+            return services;
+        }
+
         var connectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION") ?? configuration.GetConnectionString("MysqlConnection");
         services.AddDbContext<ClientDbContext>(
             options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)
