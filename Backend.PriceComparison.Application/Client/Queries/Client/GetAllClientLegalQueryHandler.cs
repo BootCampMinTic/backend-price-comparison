@@ -17,28 +17,18 @@ public class GetAllClientLegalQueryHandler(
         GetAllClientLegalQuery request,
         CancellationToken cancellationToken)
     {
-        // MOCK: Respuesta simulada para clientes legales
-        var mockClients = new List<ClientDto>
-        {
-            new() { Id = 1, CompanyName = "Empresa ABC", DocumentNumber = "9001234567", DocumentTypeId = 3, VerificationDigit = 1 },
-            new() { Id = 2, CompanyName = "Empresa XYZ", DocumentNumber = "9009876543", DocumentTypeId = 3, VerificationDigit = 7 }
-        };
-
-        // Ejemplo de cómo sería con persistencia (comentado):
-        /*
         var cacheKey = $"clients:legal:page:{request.PageNumber}:size:{request.PageSize}";
-        var cachedClients = await _cacheService.GetAsync<IEnumerable<ClientDto>>(cacheKey, cancellationToken);
-        if (cachedClients != null)
-            return cachedClients.ToList();
+
+        var cached = await _cacheService.GetAsync<IEnumerable<ClientDto>>(cacheKey, cancellationToken);
+        if (cached is not null)
+            return cached.ToList();
 
         var result = await _clientRepository.GetAllLegalAsync(request.PageNumber, request.PageSize, cancellationToken);
-        if (!result.IsSuccess && result.Value != null)
+        if (!result.IsSuccess)
             return result.Error!;
 
-        var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(result.Value).ToList();
-        await _cacheService.SetAsync(cacheKey, clientDtos, null, cancellationToken);
-        */
-
-        return mockClients;
+        var dtos = _mapper.Map<IEnumerable<ClientDto>>(result.Value).ToList();
+        await _cacheService.SetAsync(cacheKey, dtos, expiration: null, cancellationToken);
+        return dtos;
     }
 }

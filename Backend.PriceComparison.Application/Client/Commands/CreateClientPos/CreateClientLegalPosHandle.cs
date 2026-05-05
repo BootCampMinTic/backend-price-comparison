@@ -17,18 +17,13 @@ public class CreateClientLegalPosHandle(
         CreateClientLegalPosCommand request,
         CancellationToken cancellationToken)
     {
-        // MOCK: Simular creación exitosa de cliente legal
-        // Ejemplo de cómo sería con persistencia (comentado):
-        /*
         var entity = _mapper.Map<ClientLegalPosEntity>(request);
+
         var result = await _clientRepository.CreateClientLegalAsync(entity, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 
         await _cacheService.RemoveByPrefixAsync("clients:legal", cancellationToken);
-        return result.Value!;
-        */
-
         return VoidResult.Instance;
     }
 }
