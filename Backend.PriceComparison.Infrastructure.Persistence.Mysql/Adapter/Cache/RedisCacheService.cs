@@ -1,24 +1,18 @@
 using System.Text.Json;
 using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Configuration;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter.Cache;
 
-public class RedisCacheService : ICacheService
+/// <summary>Redis-backed implementation of <see cref="ICacheService"/>.</summary>
+public class RedisCacheService(
+    IConnectionMultiplexer connectionMultiplexer,
+    IOptions<RedisSettings> options) : ICacheService
 {
-    private readonly IConnectionMultiplexer _connectionMultiplexer;
-    private readonly IDatabase _database;
-    private readonly int _defaultExpirationMinutes;
-
-    public RedisCacheService(
-        IConnectionMultiplexer connectionMultiplexer,
-        RedisSettings redisSettings)
-    {
-        _connectionMultiplexer = connectionMultiplexer;
-        _database = _connectionMultiplexer.GetDatabase();
-        _defaultExpirationMinutes = redisSettings.CacheExpirationMinutes;
-    }
+    private readonly IDatabase _database = connectionMultiplexer.GetDatabase();
+    private readonly int _defaultExpirationMinutes = options.Value.CacheExpirationMinutes;
 
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
@@ -47,10 +41,10 @@ public class RedisCacheService : ICacheService
 
     public async Task RemoveByPrefixAsync(string prefix, CancellationToken cancellationToken = default)
     {
-        var endpoints = _connectionMultiplexer.GetEndPoints();
+        var endpoints = connectionMultiplexer.GetEndPoints();
         foreach (var endpoint in endpoints)
         {
-            var server = _connectionMultiplexer.GetServer(endpoint);
+            var server = connectionMultiplexer.GetServer(endpoint);
             var keys = server.Keys(pattern: $"{prefix}*");
             foreach (var key in keys)
             {

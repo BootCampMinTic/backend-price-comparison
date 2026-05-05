@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter.Cache;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
@@ -33,25 +34,28 @@ public static class DependencyInjectionService
             options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)
         ));
 
-        var redisSettings = new RedisSettings
+        services.AddOptions<RedisSettings>()
+            .Bind(configuration.GetSection("Redis"))
+            .PostConfigure(settings =>
+            {
+                var envConnection = Environment.GetEnvironmentVariable("REDIS_CONNECTION");
+                if (!string.IsNullOrWhiteSpace(envConnection))
+                    settings.ConnectionString = envConnection;
+            })
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
-            ConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION")
-                ?? configuration["Redis:ConnectionString"]
-                ?? string.Empty
-        };
-
-        if (int.TryParse(configuration["Redis:CacheExpirationMinutes"], out var cacheExpirationMinutes))
-            redisSettings.CacheExpirationMinutes = cacheExpirationMinutes;
-
-        services.AddSingleton(redisSettings);
-        services.AddSingleton<IConnectionMultiplexer>(
-            _ => ConnectionMultiplexer.Connect(redisSettings.ConnectionString));
+            var settings = sp.GetRequiredService<IOptions<RedisSettings>>().Value;
+            return ConnectionMultiplexer.Connect(settings.ConnectionString);
+        });
         services.AddSingleton<ICacheService, RedisCacheService>();
 
         services.AddSingleton<IMessageProvider, MessageProvider>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
-        
+
         return services;
     }
 }
