@@ -238,26 +238,54 @@ Los proyectos de pruebas actuales usan xUnit:
 
 ## Docker
 
-Construye la imagen de la API:
+### Construir la imagen
 
 ```powershell
-docker build -t backend-api-eds-client .
+docker build -t backend-api-eds-client:local .
 ```
 
-Ejecuta el contenedor:
+### Ejecutar el contenedor
+
+**Opcion A: con mocks (sin necesitar MySQL ni Redis)**
+
+Usa los repositorios e implementaciones en memoria definidos en `Backend.PriceComparison.Infrastructure.Persistence.Mysql/Mock`. Ideal para arrancar rapido en local.
 
 ```powershell
-docker run --rm -p 8080:8080 `
-  -e ASPNETCORE_URLS="http://+:8080" `
+docker run -d --name backend-api-eds-client -p 8080:8080 `
+  -e ASPNETCORE_ENVIRONMENT=Development `
+  -e UseMockInfrastructure=true `
+  backend-api-eds-client:local
+```
+
+**Opcion B: con MySQL y Redis reales**
+
+```powershell
+docker run -d --name backend-api-eds-client -p 8080:8080 `
+  -e ASPNETCORE_ENVIRONMENT=Production `
   -e MYSQL_CONNECTION="Server=host.docker.internal;Port=3306;Database=clients;User Id=root;Password=local_password;ConvertZeroDateTime=True;SslMode=Disabled" `
   -e REDIS_CONNECTION="host.docker.internal:6379" `
-  backend-api-eds-client
+  backend-api-eds-client:local
 ```
 
-Luego valida:
+### Validar
 
-```text
-http://localhost:8080/health/live
+```powershell
+curl http://localhost:8080/health/live
+```
+
+Otros endpoints utiles:
+
+- `http://localhost:8080/scalar/v1` - documentacion interactiva
+- `http://localhost:8080/openapi/v1.json` - spec OpenAPI
+- `http://localhost:8080/api/v1/client/document-type` - requiere header `Authorization: Bearer <token>`
+
+### Operacion del contenedor
+
+```powershell
+docker logs -f backend-api-eds-client          # seguir logs
+docker exec -it backend-api-eds-client bash    # entrar al contenedor
+docker stop backend-api-eds-client             # detener
+docker rm backend-api-eds-client               # eliminar
 ```
 
 ## CI/CD
