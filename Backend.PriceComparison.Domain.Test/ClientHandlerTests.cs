@@ -19,7 +19,7 @@ public class ClientHandlerTests
     [Fact]
     public async Task CreateClientNaturalPosHandle_WhenDomainSucceeds_RemovesNaturalClientCache()
     {
-        var domain = new FakeClientDomainService();
+        var domain = new FakeClientRepository();
         var cache = new FakeCacheService();
         var handler = new CreateClientNaturalPosHandle(domain, _mapper, cache);
         var command = new CreateClientNaturalPosCommand(
@@ -43,7 +43,7 @@ public class ClientHandlerTests
     [Fact]
     public async Task CreateClientLegalPosHandle_WhenDomainFails_DoesNotRemoveCache()
     {
-        var domain = new FakeClientDomainService
+        var domain = new FakeClientRepository
         {
             CreateLegalResult = Error.CreateInstance("CreateError", "Creation failed.", HttpStatusCode.InternalServerError)
         };
@@ -72,7 +72,7 @@ public class ClientHandlerTests
     [Fact]
     public async Task GetClientByIdQueryHandler_WhenCacheHit_ReturnsCachedClientWithoutCallingDomain()
     {
-        var domain = new FakeClientDomainService();
+        var domain = new FakeClientRepository();
         var cache = new FakeCacheService();
         var cached = new ClientDto { Id = 20, DocumentNumber = "cached" };
         await cache.SetAsync("client:Natural:20", cached);
@@ -90,7 +90,7 @@ public class ClientHandlerTests
     [Fact]
     public async Task GetClientByIdQueryHandler_WhenCacheMiss_CallsDomainAndStoresCache()
     {
-        var domain = new FakeClientDomainService
+        var domain = new FakeClientRepository
         {
             GetByIdResult = new ClientNaturalPosEntity
             {
@@ -119,7 +119,7 @@ public class ClientHandlerTests
     [Fact]
     public async Task GetAllClientNaturalQueryHandler_WhenCacheMiss_ReturnsMappedClientsAndStoresCache()
     {
-        var domain = new FakeClientDomainService
+        var domain = new FakeClientRepository
         {
             NaturalClients =
             [
@@ -143,7 +143,7 @@ public class ClientHandlerTests
         Assert.Equal(2, cached.Count());
     }
 
-    private sealed class FakeClientDomainService : IClientDomainService
+    private sealed class FakeClientRepository : IClientRepository
     {
         public Result<VoidResult, Error> CreateLegalResult { get; set; } = VoidResult.Instance;
         public Result<VoidResult, Error> CreateNaturalResult { get; set; } = VoidResult.Instance;

@@ -1,9 +1,9 @@
 using System.Text.Json;
 using Backend.PriceComparison.Domain.Ports;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Configuration;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Configuration;
 using StackExchange.Redis;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter.Cache;
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter.Cache;
 
 public class RedisCacheService : ICacheService
 {

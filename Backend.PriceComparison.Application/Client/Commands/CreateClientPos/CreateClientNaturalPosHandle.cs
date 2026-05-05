@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.ClientPos.Entities;
 namespace Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 
 public class CreateClientNaturalPosHandle(
-    IClientDomainService _serverDomainService,
+    IClientRepository _clientRepository,
     IMapper _mapper,
     ICacheService _cacheService)
     : IRequestHandler<CreateClientNaturalPosCommand, Result<VoidResult, Error>>
@@ -18,7 +18,7 @@ public class CreateClientNaturalPosHandle(
         CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<ClientNaturalPosEntity>(request);
-        var result = await _serverDomainService.CreateClientNaturalAsync(entity, cancellationToken);
+        var result = await _clientRepository.CreateClientNaturalAsync(entity, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 

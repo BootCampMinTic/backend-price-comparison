@@ -4,7 +4,7 @@ using Backend.PriceComparison.Domain.ClientPos.Entities;
 
 namespace Backend.PriceComparison.Domain.Ports
 {
-    public interface IDocumentTypeDomainService
+    public interface IDocumentTypeRepository
     {
         Task<Result<IEnumerable<DocumentTypeEntity>, Error>> GetAllAsync(CancellationToken cancellationToken);
     }

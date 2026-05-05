@@ -5,6 +5,7 @@ using Backend.PriceComparison.Application.Common.Behaviors;
 using Backend.PriceComparison.Application.Client.Mappers;
 using Backend.PriceComparison.Application.Client.Services;
 using System.Reflection;
+using FluentValidation;
 
 namespace Backend.PriceComparison.Application;
 
@@ -21,6 +22,8 @@ public static class DependencyInjectionService
         #endregion
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehaviour<,>)

@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 
 public class GetClientByDocumentNumberQueryHandler(
-IClientDomainService _serverDomainService,
+IClientRepository _clientRepository,
       IMapper _mapper,
       ICacheService _cacheService)
       : IRequestHandler<GetClientByDocumentNumberQuery, Result<ClientDto, Error>>
@@ -23,7 +23,7 @@ IClientDomainService _serverDomainService,
         if (cachedClient != null)
             return cachedClient;
 
-        var result = await _serverDomainService.GetByDocumentNumberAsync(request.DocumentNumber, request.Type, cancellationToken);
+        var result = await _clientRepository.GetByDocumentNumberAsync(request.DocumentNumber, request.Type, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 

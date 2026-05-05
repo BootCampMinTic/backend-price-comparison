@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Backend.PriceComparison.Domain.Ports;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
-namespace Backend.PriceComparison.Infraestructure.External.Plemsi
+namespace Backend.PriceComparison.Infrastructure.External.Plemsi
 {
     public static class DependencyInjectionService
     {

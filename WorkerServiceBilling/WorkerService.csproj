@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backend.PriceComparison.Domain\Backend.PriceComparison.Domain.csproj" />
-    <ProjectReference Include="..\Backend.PriceComparison.Infraestructure.External.Plemsi\Backend.PriceComparison.Infraestructure.External.Plemsi.csproj" />
-    <ProjectReference Include="..\Backend.PriceComparison.Infraestructure.Persistence.Mysql\Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj" />
+    <ProjectReference Include="..\Backend.PriceComparison.Infrastructure.External.Plemsi\Backend.PriceComparison.Infrastructure.External.Plemsi.csproj" />
+    <ProjectReference Include="..\Backend.PriceComparison.Infrastructure.Persistence.Mysql\Backend.PriceComparison.Infrastructure.Persistence.Mysql.csproj" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 
 public class GetAllClientLegalQueryHandler(
-    IClientDomainService _serverDomainService,
+    IClientRepository _clientRepository,
     ICacheService _cacheService,
     IMapper _mapper)
     : IRequestHandler<GetAllClientLegalQuery, Result<IEnumerable<ClientDto>, Error>>
@@ -23,7 +23,7 @@ public class GetAllClientLegalQueryHandler(
         if (cachedClients != null)
             return cachedClients.ToList();
 
-        var result = await _serverDomainService.GetAllLegalAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var result = await _clientRepository.GetAllLegalAsync(request.PageNumber, request.PageSize, cancellationToken);
         if (!result.IsSuccess && result.Value != null)
             return result.Error!;
 

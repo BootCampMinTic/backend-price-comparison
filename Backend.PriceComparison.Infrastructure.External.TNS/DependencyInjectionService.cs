@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend.PriceComparison.Infraestructure.External.TNS
+namespace Backend.PriceComparison.Infrastructure.External.TNS
 {
     public static class DependencyInjectionService
     {

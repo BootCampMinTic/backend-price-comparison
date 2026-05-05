@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.ClientPos.Entities;
 namespace Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 
 public class CreateClientLegalPosHandle(
-    IClientDomainService _serverDomainService,
+    IClientRepository _clientRepository,
     IMapper _mapper,
     ICacheService _cacheService)
     : IRequestHandler<CreateClientLegalPosCommand, Result<VoidResult, Error>>
@@ -18,7 +18,7 @@ public class CreateClientLegalPosHandle(
         CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<ClientLegalPosEntity>(request);
-        var result = await _serverDomainService.CreateClientLegalAsync(entity, cancellationToken);
+        var result = await _clientRepository.CreateClientLegalAsync(entity, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 

@@ -26,11 +26,11 @@ La solucion principal es `backend-price-comparison.sln` y esta organizada por ca
 | `Backend.PriceComparison.Api` | Punto de entrada HTTP. Configura Minimal APIs, CORS, Scalar/OpenAPI, Redis, health checks y middleware de token Bearer. |
 | `Backend.PriceComparison.Application` | Casos de uso, comandos, queries, servicios de aplicacion, MediatR, AutoMapper y validaciones. |
 | `Backend.PriceComparison.Domain` | Entidades, contratos de dominio, modelos comunes y resultados. |
-| `Backend.PriceComparison.Infraestructure.Persistence.Mysql` | Persistencia MySQL con Entity Framework Core y servicios de dominio concretos. |
+| `Backend.PriceComparison.Infrastructure.Persistence.Mysql` | Persistencia MySQL con Entity Framework Core y servicios de dominio concretos. |
 | `Backend.PriceComparison.Api.Tests` | Proyecto de pruebas xUnit para la API. |
 | `Backend.PriceComparison.Domain.Test` | Proyecto de pruebas xUnit para dominio. |
 
-Tambien existen carpetas auxiliares como `LoadTest`, `WorkerServiceBilling`, `Backend.PriceComparison.Common`, `Backend.PriceComparison.Infraestructure.External.Plemsi` y `Backend.PriceComparison.Infraestructure.External.TNS`. No todas estan incluidas en la solucion principal.
+Tambien existen carpetas auxiliares como `LoadTest`, `WorkerServiceBilling`, `Backend.PriceComparison.Common`, `Backend.PriceComparison.Infrastructure.External.Plemsi` y `Backend.PriceComparison.Infrastructure.External.TNS`. No todas estan incluidas en la solucion principal.
 
 ## Tecnologias principales
 

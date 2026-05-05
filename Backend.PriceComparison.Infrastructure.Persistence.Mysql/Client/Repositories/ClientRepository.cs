@@ -4,18 +4,18 @@ using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
 using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.DomainServices
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories
 {
-    internal class ClientDomainService(ClientDbContext context) : IClientDomainService
+    internal class ClientRepository(ClientDbContext context) : IClientRepository
     {
         public async Task<Result<VoidResult, Error>> CreateClientLegalAsync(ClientLegalPosEntity request, CancellationToken cancellationToken)
         {
             await context.ClientLegalPos.AddAsync(request, cancellationToken);
             var result = await context.SaveChangesAsync() > 0;
             if (!result)
-                return ClienErrorBuilder.ClientLegalCreationException();
+                return ClientErrorBuilder.ClientLegalCreationException();
 
             return VoidResult.Instance;
         }
@@ -25,7 +25,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
             await context.ClientNaturalPos.AddAsync(request, cancellationToken);
             var result = await context.SaveChangesAsync() > 0;
             if (!result)
-                return ClienErrorBuilder.ClientNaturalCreationException();
+                return ClientErrorBuilder.ClientNaturalCreationException();
 
             return VoidResult.Instance;
         }
@@ -37,7 +37,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
                 .Take(pageSize).ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
-                return ClienErrorBuilder.NoDocumentTypeRecordsFoundException();
+                return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
 
             return entities;
         }
@@ -49,7 +49,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
                 .Take(pageSize).ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
-                return ClienErrorBuilder.NoDocumentTypeRecordsFoundException();
+                return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
 
             return entities;
         }
@@ -68,7 +68,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
             }
             else
             {
-                return ClienErrorBuilder.ClienNotFoundException(id);
+                return ClientErrorBuilder.ClientNotFoundException(id);
             }
 
             return client;
@@ -88,7 +88,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
             }
             else
             {
-                return ClienErrorBuilder.ClienNotFoundException(documentNumber);
+                return ClientErrorBuilder.ClientNotFoundException(documentNumber);
             }
 
             return client;

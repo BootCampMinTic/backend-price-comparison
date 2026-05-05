@@ -5,7 +5,7 @@ using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
 
 namespace Backend.PriceComparison.Domain.Ports
 {
-    public interface IClientDomainService
+    public interface IClientRepository
     {
         Task<Result<VoidResult, Error>> CreateClientLegalAsync(ClientLegalPosEntity request, CancellationToken cancellationToken);
         Task<Result<VoidResult, Error>> CreateClientNaturalAsync(ClientNaturalPosEntity request, CancellationToken cancellationToken);

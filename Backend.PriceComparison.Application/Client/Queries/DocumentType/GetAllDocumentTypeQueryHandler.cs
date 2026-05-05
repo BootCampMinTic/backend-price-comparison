@@ -7,7 +7,7 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Client.Queries.DocumentType;
 
 public class GetAllDocumentTypeQueryHandler(
- IDocumentTypeDomainService _serverDomainService,
+ IDocumentTypeRepository _documentTypeRepository,
 ICacheService _cacheService)
     : IRequestHandler<GetAllDocumentTypeQuery, Result<ApiResponseDto<IEnumerable<DocumentTypeDto>>, Error>>
 {
@@ -21,7 +21,7 @@ ICacheService _cacheService)
         if (cachedDocumentTypes != null)
             return new ApiResponseDto<IEnumerable<DocumentTypeDto>>(cachedDocumentTypes.ToList());
 
-        var result = await _serverDomainService.GetAllAsync(cancellationToken);
+        var result = await _documentTypeRepository.GetAllAsync(cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 

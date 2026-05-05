@@ -19,9 +19,9 @@ public class ErrorTests
     [Fact]
     public void ClientNotFound_ById_CreatesNotFoundError()
     {
-        var error = ClienErrorBuilder.ClienNotFoundException(10);
+        var error = ClientErrorBuilder.ClientNotFoundException(10);
+        Assert.Equal(ClientErrorBuilder.CLIENT_NOT_FOUND_ERROR, error.Code);
 
-        Assert.Equal(ClienErrorBuilder.CLIENT_NOT_FOUND_ERROR, error.Code);
         Assert.Equal(HttpStatusCode.NotFound, error.HttpStatusCode);
         Assert.Contains("10", error.Description);
     }

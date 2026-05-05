@@ -1,6 +1,5 @@
-using Backend.PriceComparison.Api.Common.Configurations;
 using Backend.PriceComparison.Application;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql;
 using Backend.PriceComparison.Api.Endpoints;
 using Backend.PriceComparison.Api.Extensions;
 using Backend.PriceComparison.Api.Middleware;
@@ -18,9 +17,6 @@ builder.Services
 
 builder.Services.AddCustomHealthChecks();
 
-// Add global exception filter configuration
-builder.Services.AddSingleton<GlobalExceptionConfiguration>();
-
 builder.Services.AddRouting(routing => routing.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -31,7 +27,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BackendPriceComparison", policy =>
     {
-        var allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>();
+        var allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>() ?? new List<string> { "*" };
         policy.WithOrigins(allowedOrigins.ToArray())
      .AllowAnyMethod()
        .AllowAnyHeader()
@@ -40,6 +36,9 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Custom exception handling middleware
+app.UseCustomExceptionMiddleware();
 
 app.UseCors("BackendPriceComparison");
 

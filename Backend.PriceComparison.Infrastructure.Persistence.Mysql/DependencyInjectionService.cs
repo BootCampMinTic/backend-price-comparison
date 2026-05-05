@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Backend.PriceComparison.Domain.Ports;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter.Cache;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Configuration;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.DomainServices;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter.Cache;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Configuration;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 using StackExchange.Redis;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql;
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql;
 
 public static class DependencyInjectionService
 {
@@ -36,8 +36,8 @@ public static class DependencyInjectionService
         services.AddSingleton<ICacheService, RedisCacheService>();
 
         services.AddTransient<IMessageProvider, MessageProvider>();
-        services.AddScoped<IClientDomainService, ClientDomainService>();
-        services.AddScoped<IDocumentTypeDomainService, DocumentTypeDomainService>();
+        services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
         
         return services;
     }

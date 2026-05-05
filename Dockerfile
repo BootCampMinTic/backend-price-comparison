@@ -11,7 +11,7 @@ COPY ["backend-price-comparison.sln", "."]
 COPY ["Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj", "Backend.PriceComparison.Api/"]
 COPY ["Backend.PriceComparison.Application/Backend.PriceComparison.Application.csproj", "Backend.PriceComparison.Application/"]
 COPY ["Backend.PriceComparison.Domain/Backend.PriceComparison.Domain.csproj", "Backend.PriceComparison.Domain/"]
-COPY ["Backend.PriceComparison.Infraestructure.Persistence.Mysql/Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj", "Backend.PriceComparison.Infraestructure.Persistence.Mysql/"]
+COPY ["Backend.PriceComparison.Infrastructure.Persistence.Mysql/Backend.PriceComparison.Infrastructure.Persistence.Mysql.csproj", "Backend.PriceComparison.Infrastructure.Persistence.Mysql/"]
 RUN dotnet restore "./Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj"
 COPY . .
 RUN dotnet build "./Backend.PriceComparison.Api/Backend.PriceComparison.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build --no-restore

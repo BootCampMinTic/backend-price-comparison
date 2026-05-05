@@ -1,6 +1,6 @@
 using Backend.PriceComparison.Domain.Ports;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Adapter;
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
 public class MessageProvider : IMessageProvider
 {
     public string ErrorValidatorFieldNotNull => MessageProviderResource.ErrorValidatorFieldNotNull;

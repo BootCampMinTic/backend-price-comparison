@@ -18,7 +18,7 @@ namespace Backend.PriceComparison.Api.HealthChecks
      try
             {
      using var scope = _serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetService<Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context.ClientDbContext>();
+            var dbContext = scope.ServiceProvider.GetService<Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context.ClientDbContext>();
       
           if (dbContext == null)
                {

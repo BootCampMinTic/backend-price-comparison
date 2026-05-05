@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 
 public class GetClientByIdQueryHandler(
-    IClientDomainService _serverDomainService,
+    IClientRepository _clientRepository,
     IMapper _mapper,
     ICacheService _cacheService)
     : IRequestHandler<GetClientByIdQuery, Result<ClientDto, Error>>
@@ -23,7 +23,7 @@ public class GetClientByIdQueryHandler(
         if (cachedClient != null)
             return cachedClient;
 
-        var result = await _serverDomainService.GetByIdAsync(request.Id, request.Type, cancellationToken);
+        var result = await _clientRepository.GetByIdAsync(request.Id, request.Type, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 

@@ -10,8 +10,8 @@ WORKDIR /src
 COPY ["WorkerServiceBilling/WorkerService.csproj", "WorkerServiceBilling/"]
 COPY ["Backend.PriceComparison.Application/Backend.PriceComparison.Application.csproj", "Backend.PriceComparison.Application/"]
 COPY ["Backend.PriceComparison.Domain/Backend.PriceComparison.Domain.csproj", "Backend.PriceComparison.Domain/"]
-COPY ["Backend.PriceComparison.Infraestructure.External.Plemsi/Backend.PriceComparison.Infraestructure.External.Plemsi.csproj", "Backend.PriceComparison.Infraestructure.External.Plemsi/"]
-COPY ["Backend.PriceComparison.Infraestructure.Persistence.Mysql/Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj", "Backend.PriceComparison.Infraestructure.Persistence.Mysql/"]
+COPY ["Backend.PriceComparison.Infrastructure.External.Plemsi/Backend.PriceComparison.Infrastructure.External.Plemsi.csproj", "Backend.PriceComparison.Infrastructure.External.Plemsi/"]
+COPY ["Backend.PriceComparison.Infrastructure.Persistence.Mysql/Backend.PriceComparison.Infrastructure.Persistence.Mysql.csproj", "Backend.PriceComparison.Infrastructure.Persistence.Mysql/"]
 RUN dotnet restore "./WorkerServiceBilling/WorkerService.csproj"
 COPY . .
 WORKDIR "/src/WorkerServiceBilling"

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql {
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.PriceComparison.Infraestructure.Persistence.Mysql.MessageProviderResource", typeof(MessageProviderResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.PriceComparison.Infrastructure.Persistence.Mysql.MessageProviderResource", typeof(MessageProviderResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

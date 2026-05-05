@@ -3,15 +3,15 @@ using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.DomainServices
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories
 {
-    public class DocumentTypeDomainService: IDocumentTypeDomainService
+    public class DocumentTypeRepository: IDocumentTypeRepository
     {
         private readonly ClientDbContext _context;
 
-        public DocumentTypeDomainService(ClientDbContext context)
+        public DocumentTypeRepository(ClientDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Client.Domai
             var entities = await _context.DocumentTypes.ToListAsync(cancellationToken);
 
             if (entities.Count == 0)
-                return ClienErrorBuilder.NoDocumentTypeRecordsFoundException();
+                return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
 
             return entities;
         }

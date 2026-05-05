@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{1533F1DA-3A5D-489A-BFCB-321AD7579EE3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{8F0C2163-ED5E-449F-9CC3-5AB3586CC66E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8F0C2163-ED5E-449F-9CC3-5AB3586CC66E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.PriceComparison.Api", "Backend.PriceComparison.Api\Backend.PriceComparison.Api.csproj", "{BC552182-B276-4543-9612-CE7284503C78}"
 EndProject
@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mysql", "Mysql", "{A93693CB-BA3C-43DF-A18F-EF864BA5925B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.PriceComparison.Infraestructure.Persistence.Mysql", "Backend.PriceComparison.Infraestructure.Persistence.Mysql\Backend.PriceComparison.Infraestructure.Persistence.Mysql.csproj", "{88FF2EC0-3ECB-47F3-83BC-50B75BD05D39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.PriceComparison.Infrastructure.Persistence.Mysql", "Backend.PriceComparison.Infrastructure.Persistence.Mysql\Backend.PriceComparison.Infrastructure.Persistence.Mysql.csproj", "{88FF2EC0-3ECB-47F3-83BC-50B75BD05D39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.PriceComparison.Api.Tests", "Backend.PriceComparison.Api.Tests\Backend.PriceComparison.Api.Tests.csproj", "{112EDF2F-83CE-40D7-A130-315F392B14C7}"
 EndProject

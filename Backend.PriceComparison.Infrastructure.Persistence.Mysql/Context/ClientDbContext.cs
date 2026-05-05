@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
 
-namespace Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context
+namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
 {
     public class ClientDbContext(DbContextOptions options) : DbContext(options)
     {

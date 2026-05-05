@@ -8,7 +8,7 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 
 public class GetAllClientNaturalQueryHandler(
-IClientDomainService _serverDomainService,
+IClientRepository _clientRepository,
     ICacheService _cacheService,
  IMapper _mapper)
 : IRequestHandler<GetAllClientNaturalQuery, Result<IEnumerable<ClientDto>, Error>>
@@ -23,7 +23,7 @@ IClientDomainService _serverDomainService,
         if (cachedClients != null)
             return cachedClients.ToList();
 
-        var result = await _serverDomainService.GetAllNaturalAsync(request.PageNumber, request.PageSize, cancellationToken);
+        var result = await _clientRepository.GetAllNaturalAsync(request.PageNumber, request.PageSize, cancellationToken);
         if (!result.IsSuccess && result.Value != null)
             return result.Error!;
 

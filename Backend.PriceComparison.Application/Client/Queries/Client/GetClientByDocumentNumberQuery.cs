@@ -6,9 +6,10 @@ using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
 
 namespace Backend.PriceComparison.Application.Client.Queries.Client
 {
-    public record GetClientByDocumentNumberQuery : IRequest<Result<ClientDto, Error>>
+    public class GetClientByDocumentNumberQuery : IRequest<Result<ClientDto, Error>>
     {
-        public string DocumentNumber { get; init; }
-        public ClientType Type { get; init; }
+        public string DocumentNumber { get; set; } = string.Empty;
+        public ClientType Type { get; set; }
     }
+
 }

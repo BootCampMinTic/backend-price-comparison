@@ -1,5 +1,5 @@
 using Backend.PriceComparison.Domain.Billing.Ports;
-using Backend.PriceComparison.Domain.Client.DomainService;
+using Backend.PriceComparison.Domain.Ports;
 using Backend.PriceComparison.Domain.FERetail.Ports;
 
 namespace WorkerServiceBilling
@@ -25,8 +25,8 @@ namespace WorkerServiceBilling
                 {
                     using (var scope = _serviceProvider.CreateScope()) 
                     {
-                        var clientDomainService = scope.ServiceProvider.GetRequiredService<IClientDomainService>();
-                        var clients = await clientDomainService.GetAllAsync(cancellationToken);
+                        var clientRepository = scope.ServiceProvider.GetRequiredService<IClientRepository>();
+                        var clients = await clientRepository.GetAllAsync(cancellationToken);
                         var billingService = scope.ServiceProvider.GetRequiredService<IBillingService>();
                         var retailService = scope.ServiceProvider.GetRequiredService<IFERetailService>();
 

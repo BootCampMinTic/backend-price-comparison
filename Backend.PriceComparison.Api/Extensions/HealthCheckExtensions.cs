@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Backend.PriceComparison.Api.HealthChecks;
-using Backend.PriceComparison.Infraestructure.Persistence.Mysql.Context;
+using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
 namespace Backend.PriceComparison.Api.Extensions
 {

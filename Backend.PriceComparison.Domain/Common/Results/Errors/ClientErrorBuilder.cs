@@ -2,7 +2,7 @@ using System.Net;
 
 namespace Backend.PriceComparison.Domain.Common.Results.Errors;
 
-public class ClienErrorBuilder : IError
+public class ClientErrorBuilder : IError
 {
     public const string CLIENT_CREATION_ERROR = "ClientCreationErrorException";
     public const string NO_DOCUMENT_TYPE_RECORDS_FOUND = "NoDocumentTypeRecordsFoundErrorException";
@@ -23,12 +23,12 @@ public class ClienErrorBuilder : IError
         "No document type records were found.",
         HttpStatusCode.NotFound);
 
-    public static Error ClienNotFoundException(int id) => Error.CreateInstance(
+    public static Error ClientNotFoundException(int id) => Error.CreateInstance(
         CLIENT_NOT_FOUND_ERROR,
         $"Client Billing Electronic with ID {id} was not found.",
         HttpStatusCode.NotFound);
 
-    public static Error ClienNotFoundException(string id) => Error.CreateInstance(
+    public static Error ClientNotFoundException(string id) => Error.CreateInstance(
         CLIENT_NOT_FOUND_ERROR,
         $"Client Billing Electronic with document number {id} was not found.",
         HttpStatusCode.NotFound);
