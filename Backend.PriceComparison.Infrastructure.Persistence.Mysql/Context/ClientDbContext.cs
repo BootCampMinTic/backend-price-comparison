@@ -15,44 +15,15 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
         EntityConfiguration(modelBuilder);
         }
 
-  private static void EntityConfiguration(ModelBuilder modelBuilder)
+        private static void EntityConfiguration(ModelBuilder modelBuilder)
         {
-   // TEMPORARY FIX: Ignore DocumentCountry property until database schema is updated
-            // 
-            // Issue: The DocumentCountry property exists in both ClientNaturalPosEntity and 
-            // ClientLegalPosEntity domain models, but the corresponding column doesn't exist 
-  // in the database tables. This causes MySqlException: "Unknown column 'c.DocumentCountry' 
-            // in 'field list'" when Entity Framework tries to generate SQL queries.
-            //
-    // Current Impact:
-            // - GetAllNaturalAsync() and GetAllLegalAsync() queries fail
-            // - GetByIdAsync() and GetByDocumentNumberAsync() queries fail  
-            // - Create operations (CreateClientNaturalAsync/CreateClientLegalAsync) might fail
-            // - All operations involving these entities that try to access DocumentCountry fail
-   //
-       // Affected Components:
-     // - Controllers: ClientController endpoints for natural/legal clients
-        // - Commands: CreateClientNaturalPosCommand, CreateClientLegalPosCommand 
-            // - Queries: GetAllClientNaturalQuery, GetAllClientLegalQuery, GetClientByIdQuery, GetClientByDocumentNumberQuery
-    // - Domain Services: ClientDomainService methods
- //
-       // TODO: To permanently fix this issue, you need to:
-       // 1. Create a database migration to add the DocumentCountry column to both tables:
-   //    - ALTER TABLE ClientNaturalPos ADD COLUMN DocumentCountry VARCHAR(255) NULL;
-     //    - ALTER TABLE ClientLegalPos ADD COLUMN DocumentCountry VARCHAR(255) NULL;
-            // 2. Remove these Ignore() configurations below
-            // 3. Test all affected endpoints to ensure they work correctly
-      //
-        // NOTE: Until the database schema is updated, the DocumentCountry property will:
-      // - Accept values in API requests (Commands) but won't be persisted to database
-   // - Always return NULL/empty in API responses (Queries) since it's not loaded from database
-   // - Not cause runtime exceptions, allowing the application to function normally
-            
-            modelBuilder.Entity<ClientNaturalPosEntity>()
-          .Ignore(e => e.DocumentCountry);
-            
-            modelBuilder.Entity<ClientLegalPosEntity>()
-      .Ignore(e => e.DocumentCountry);
+            modelBuilder.Entity<DocumentTypeEntity>().HasData(
+                new DocumentTypeEntity { Id = 1, Name = "Cédula de Ciudadanía", DocumentType = "CC", HelpTextHeader = "Ingrese su cédula", HelpText = "Número de cédula sin puntos ni espacios", Regex = "^[0-9]{6,10}$" },
+                new DocumentTypeEntity { Id = 2, Name = "Cédula de Extranjería", DocumentType = "CE", HelpTextHeader = "Ingrese su cédula de extranjería", HelpText = "Número de cédula de extranjería", Regex = "^[0-9]{6,12}$" },
+                new DocumentTypeEntity { Id = 3, Name = "NIT", DocumentType = "NIT", HelpTextHeader = "Ingrese el NIT", HelpText = "Número de Identificación Tributario sin dígito de verificación", Regex = "^[0-9]{6,12}$" },
+                new DocumentTypeEntity { Id = 4, Name = "Pasaporte", DocumentType = "PP", HelpTextHeader = "Ingrese su pasaporte", HelpText = "Número de pasaporte", Regex = "^[A-Za-z0-9]{6,20}$" },
+                new DocumentTypeEntity { Id = 5, Name = "Registro Civil", DocumentType = "RC", HelpTextHeader = "Ingrese el registro civil", HelpText = "Número de registro civil", Regex = "^[0-9]{6,10}$" }
+            );
         }
     }
 }

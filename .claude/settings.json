@@ -1,5 +1,15 @@
 {
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true
+  },
+  "mcpServers": {
+    "mysql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-mysql",
+        "mysql://eduar:bootcamp2025*@51.81.90.175:3306/eduar_demo"
+      ]
+    }
   }
 }

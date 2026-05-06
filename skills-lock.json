@@ -13,6 +13,12 @@
       "skillPath": "skills/.curated/aspnet-core/SKILL.md",
       "computedHash": "192537b889ef60aba67db5f3c1f694e460fde9b6a45fb4c35ecab8e7710bfa67"
     },
+    "conventional-commit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/conventional-commit/SKILL.md",
+      "computedHash": "f29c9486cede6c7b2df0cfb0a2e4aa67446552b991bcf17d1b309e903171f03d"
+    },
     "dotnet-best-practices": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
