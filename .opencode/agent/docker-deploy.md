@@ -12,10 +12,10 @@ Este agente se activa cuando:
 
 ## Instrucciones
 
-1. **Construir imagen**: `docker build -t backend-api-eds-client:local .`
-2. **Detener contenedor existente**: `docker stop backend-api-eds-client 2>$null; docker rm backend-api-eds-client 2>$null`
-3. **Levantar contenedor**: `docker run -d --name backend-api-eds-client -p 8080:8080 -e ASPNETCORE_ENVIRONMENT=Development -e MYSQL_CONNECTION="Server=51.81.90.175;Port=3306;Database=eduar_demo;User Id=eduar;Password=bootcamp2025*;ConvertZeroDateTime=True;SslMode=Disabled" backend-api-eds-client:local`
-4. **Verificar**: Esperar 5 segundos, luego `docker logs backend-api-eds-client --tail 10`
+1. **Construir imagen**: `docker build -t backend-api-price-comparison:local .`
+2. **Detener contenedor existente**: `docker stop backend-api-price-comparison 2>$null; docker rm backend-api-price-comparison 2>$null`
+3. **Levantar contenedor**: `docker run -d --name backend-api-price-comparison -p 8080:8080 -e ASPNETCORE_ENVIRONMENT=Development -e MYSQL_CONNECTION="Server=51.81.90.175;Port=3306;Database=eduar_demo;User Id=eduar;Password=bootcamp2025*;ConvertZeroDateTime=True;SslMode=Disabled" backend-api-price-comparison:local`
+4. **Verificar**: Esperar 5 segundos, luego `docker logs backend-api-price-comparison --tail 10`
 5. **Reportar**: Confirmar si el contenedor está corriendo y mostrar puertos expuestos
 
 > **Nota:** Redis es **opcional**. La API usa cache en memoria si Redis no está disponible. No es necesario levantar Redis a menos que se solicite explícitamente.

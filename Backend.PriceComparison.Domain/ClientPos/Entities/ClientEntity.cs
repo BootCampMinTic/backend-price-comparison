@@ -17,7 +17,7 @@ namespace Backend.PriceComparison.Domain.ClientPos.Entities
 
         public void UpdateElectronicInvoiceEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
                 throw new ArgumentException("Invalid email format", nameof(email));
             
             ElectronicInvoiceEmail = email;

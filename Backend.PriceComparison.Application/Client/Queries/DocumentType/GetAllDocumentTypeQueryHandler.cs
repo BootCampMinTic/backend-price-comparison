@@ -19,7 +19,7 @@ public class GetAllDocumentTypeQueryHandler(
     {
         var cached = await _cacheService.GetAsync<IEnumerable<DocumentTypeDto>>(CacheKey, cancellationToken);
         if (cached is not null)
-            return new ApiResponseDto<IEnumerable<DocumentTypeDto>>(cached.ToList());
+            return new ApiResponseDto<IEnumerable<DocumentTypeDto>>([.. cached]);
 
         var result = await _documentTypeRepository.GetAllAsync(cancellationToken);
         if (!result.IsSuccess)

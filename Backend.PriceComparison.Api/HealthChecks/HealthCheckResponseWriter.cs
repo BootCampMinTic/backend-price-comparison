@@ -25,8 +25,8 @@ namespace Backend.PriceComparison.Api.HealthChecks
      Name = entry.Key,
         Status = entry.Value.Status.ToString(),
       Duration = entry.Value.Duration.TotalMilliseconds,
-    Description = entry.Value.Description,
-        Tags = entry.Value.Tags,
+          entry.Value.Description,
+          entry.Value.Tags,
       Data = entry.Value.Data?.Count > 0 ? entry.Value.Data : null,
      Exception = entry.Value.Exception?.Message
       })

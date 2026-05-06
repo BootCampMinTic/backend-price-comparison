@@ -13,19 +13,19 @@ namespace Backend.PriceComparison.Api.Extensions
  .AddCheck<ApplicationHealthCheck>(
      "application",
       HealthStatus.Unhealthy,
-      tags: new[] { "ready", "live" })
+      tags: ["ready", "live"])
    
    // Database connectivity check
       .AddCheck<DatabaseHealthCheck>(
   "database",
  HealthStatus.Unhealthy,
-    tags: new[] { "ready" })
+    tags: ["ready"])
        
  // Entity Framework specific health check
     .AddDbContextCheck<ClientDbContext>(
        "ef-database",
     HealthStatus.Unhealthy,
-   tags: new[] { "ready" });
+   tags: ["ready"]);
 
          return services;
       }

@@ -27,8 +27,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BackendPriceComparison", policy =>
     {
-        var allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>() ?? new List<string> { "*" };
-        policy.WithOrigins(allowedOrigins.ToArray())
+        var allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>() ?? ["*"];
+        policy.WithOrigins([.. allowedOrigins])
      .AllowAnyMethod()
        .AllowAnyHeader()
      .AllowCredentials();
@@ -73,3 +73,5 @@ app.MapDocumentTypeEndpoints();
 app.MapHealthApiEndpoints();
 
 app.Run();
+
+public partial class Program { }

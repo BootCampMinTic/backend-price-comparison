@@ -2,16 +2,11 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Backend.PriceComparison.Api.HealthChecks
 {
-    public class DatabaseHealthCheck : IHealthCheck
+    public class DatabaseHealthCheck(IServiceProvider serviceProvider) : IHealthCheck
     {
-     private readonly IServiceProvider _serviceProvider;
+     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-      public DatabaseHealthCheck(IServiceProvider serviceProvider)
-      {
-       _serviceProvider = serviceProvider;
-    }
-
-    public async Task<HealthCheckResult> CheckHealthAsync(
+        public async Task<HealthCheckResult> CheckHealthAsync(
   HealthCheckContext context,
             CancellationToken cancellationToken = default)
     {

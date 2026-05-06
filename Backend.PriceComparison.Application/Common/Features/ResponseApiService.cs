@@ -9,7 +9,7 @@ public static class ResponseApiService
         object? data = null,
         string? message = null)
     {
-        bool success = false;
+        var success = false;
 
         if (statusCode >= 200 && statusCode < 300)
         {

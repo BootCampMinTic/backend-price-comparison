@@ -21,12 +21,12 @@ public class Result<TValue, TError>
         Error = error;
     }
 
-    public static implicit operator Result<TValue, TError>(TValue value) => new Result<TValue, TError>(value);
+    public static implicit operator Result<TValue, TError>(TValue value) => new(value);
 
-    public static implicit operator Result<TValue, TError>(TError error) => new Result<TValue, TError>(error);
+    public static implicit operator Result<TValue, TError>(TError error) => new(error);
 
-    public static Result<TValue, TError> Success(TValue value) => new Result<TValue, TError>(value);
-    public static Result<TValue, TError> Failure(TError error) => new Result<TValue, TError>(error);
+    public static Result<TValue, TError> Success(TValue value) => new(value);
+    public static Result<TValue, TError> Failure(TError error) => new(error);
 
 
 }

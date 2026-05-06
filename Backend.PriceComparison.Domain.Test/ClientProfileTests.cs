@@ -2,6 +2,7 @@ using AutoMapper;
 using Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 using Backend.PriceComparison.Application.Client.Mappers;
 using Backend.PriceComparison.Domain.ClientPos.Entities;
+using Backend.PriceComparison.Domain.Test.Builders;
 
 namespace Backend.PriceComparison.Domain.Test;
 
@@ -12,15 +13,9 @@ public class ClientProfileTests
     [Fact]
     public void CreateClientNaturalPosCommand_MapsToEntity()
     {
-        var command = new CreateClientNaturalPosCommand(
-            "Ana",
-            "Maria",
-            "Lopez",
-            "Diaz",
-            "123",
-            "ana@example.com",
-            1,
-            "CO");
+        CreateClientNaturalPosCommand command = new CreateClientNaturalPosCommandBuilder()
+            .WithMiddleName("Maria")
+            .WithSecondSurname("Diaz");
 
         var entity = _mapper.Map<ClientNaturalPosEntity>(command);
 
@@ -39,18 +34,12 @@ public class ClientProfileTests
     [Fact]
     public void CreateClientLegalPosCommand_MapsToEntity()
     {
-        var command = new CreateClientLegalPosCommand(
-            "Empresa SAS",
-            7,
-            "900123",
-            "billing@example.com",
-            true,
-            false,
-            true,
-            false,
-            2,
-            true,
-            "CO");
+        CreateClientLegalPosCommand command = new CreateClientLegalPosCommandBuilder()
+            .WithVerificationDigit(7)
+            .WithVatResponsibleParty(true)
+            .WithWithholdingAgent(true)
+            .WithDocumentTypeId(2)
+            .WithLargeTaxpayer(true);
 
         var entity = _mapper.Map<ClientLegalPosEntity>(command);
 

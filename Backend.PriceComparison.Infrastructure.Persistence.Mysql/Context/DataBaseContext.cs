@@ -10,7 +10,7 @@ public class DataBaseContext(DbContextOptions options) : DbContext(options)
         EntityConfiguration(modelBuilder);
     }
 
-    private static void EntityConfiguration(ModelBuilder modelBuilder)
+    private static void EntityConfiguration(ModelBuilder _)
     {
       
     }

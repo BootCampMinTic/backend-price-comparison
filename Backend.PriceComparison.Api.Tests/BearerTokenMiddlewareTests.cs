@@ -14,11 +14,11 @@ public class BearerTokenMiddlewareTests
     public async Task InvokeAsync_PublicHealthEndpoint_AllowsRequestWithoutToken()
     {
         var nextCalled = false;
-        RequestDelegate next = _ =>
+        Task next(HttpContext _)
         {
             nextCalled = true;
             return Task.CompletedTask;
-        };
+        }
         var middleware = new BearerTokenMiddleware(next, NullLogger<BearerTokenMiddleware>.Instance, new TestEnvironment());
         var context = new DefaultHttpContext();
         context.Request.Path = "/health/live";
@@ -33,11 +33,11 @@ public class BearerTokenMiddlewareTests
     public async Task InvokeAsync_PrivateEndpointWithoutToken_ReturnsUnauthorized()
     {
         var nextCalled = false;
-        RequestDelegate next = _ =>
+        Task next(HttpContext _)
         {
             nextCalled = true;
             return Task.CompletedTask;
-        };
+        }
         var middleware = new BearerTokenMiddleware(next, NullLogger<BearerTokenMiddleware>.Instance, new TestEnvironment());
         var context = new DefaultHttpContext();
         context.Request.Path = "/api/v1/client/natural";
@@ -53,11 +53,11 @@ public class BearerTokenMiddlewareTests
     public async Task InvokeAsync_PrivateEndpointWithBearerToken_CallsNext()
     {
         var nextCalled = false;
-        RequestDelegate next = _ =>
+        Task next(HttpContext _)
         {
             nextCalled = true;
             return Task.CompletedTask;
-        };
+        }
         var middleware = new BearerTokenMiddleware(next, NullLogger<BearerTokenMiddleware>.Instance, new TestEnvironment());
         var context = new DefaultHttpContext();
         context.Request.Path = "/api/v1/client/natural";

@@ -40,7 +40,7 @@ public class ClientQueryService(IMediator mediator) : IClientQueryService
         string clientType,
         CancellationToken cancellationToken = default)
     {
-        var type = clientType.ToLower() == "natural" ? ClientType.Natural : ClientType.Legal;
+        var type = clientType.Equals("natural", StringComparison.CurrentCultureIgnoreCase) ? ClientType.Natural : ClientType.Legal;
         var query = new GetClientByIdQuery
         {
             Id = id,
@@ -54,7 +54,7 @@ public class ClientQueryService(IMediator mediator) : IClientQueryService
         string clientType,
         CancellationToken cancellationToken = default)
     {
-        var type = clientType.ToLower() == "natural" ? ClientType.Natural : ClientType.Legal;
+        var type = clientType.Equals("natural", StringComparison.CurrentCultureIgnoreCase) ? ClientType.Natural : ClientType.Legal;
         var query = new GetClientByDocumentNumberQuery
         {
             DocumentNumber = documentNumber,

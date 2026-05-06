@@ -16,7 +16,7 @@ public static class ResultExtension
     public static IResult Match<TValue, TError>(
         this Result<TValue, TError> result,
         Func<TValue, IResult> onSuccess,
-        Func<object, object> value)
+        Func<object, object> _)
         where TError : Error
     {
         return result.IsSuccess ? onSuccess(result.Value!) : result.ToErrorResult();

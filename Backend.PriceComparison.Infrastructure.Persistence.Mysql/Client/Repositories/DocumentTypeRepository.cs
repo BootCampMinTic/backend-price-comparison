@@ -7,14 +7,9 @@ using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
 namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories
 {
-    public class DocumentTypeRepository: IDocumentTypeRepository
+    public class DocumentTypeRepository(ClientDbContext context) : IDocumentTypeRepository
     {
-        private readonly ClientDbContext _context;
-
-        public DocumentTypeRepository(ClientDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ClientDbContext _context = context;
 
         public async Task<Result<IEnumerable<DocumentTypeEntity>, Error>> GetAllAsync(CancellationToken cancellationToken)
         {

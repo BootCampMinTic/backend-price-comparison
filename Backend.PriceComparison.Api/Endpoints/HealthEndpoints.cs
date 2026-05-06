@@ -35,14 +35,14 @@ public static class HealthEndpoints
         var response = new
         {
             Status = result.Status.ToString(),
-            TotalDuration = result.TotalDuration,
+            result.TotalDuration,
             Entries = result.Entries.Select(e => new
             {
                 Name = e.Key,
                 Status = e.Value.Status.ToString(),
-                Duration = e.Value.Duration,
-                Description = e.Value.Description,
-                Tags = e.Value.Tags
+                e.Value.Duration,
+                e.Value.Description,
+                e.Value.Tags
             })
         };
 

@@ -14,7 +14,7 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Migrations
         {
             migrationBuilder.InsertData(
                 table: "DocumentTypes",
-                columns: new[] { "Id", "DocumentType", "Fields", "HelpText", "HelpTextHeader", "Name", "Regex" },
+                columns: ["Id", "DocumentType", "Fields", "HelpText", "HelpTextHeader", "Name", "Regex"],
                 values: new object[,]
                 {
                     { 1, "CC", null, "Número de cédula sin puntos ni espacios", "Ingrese su cédula", "Cédula de Ciudadanía", "^[0-9]{6,10}$" },
