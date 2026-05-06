@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Backend.PriceComparison.Api.HealthChecks;
 
-public class ApplicationHealthCheck : IHealthCheck
+public sealed class ApplicationHealthCheck : IHealthCheck
 {
     public Task<HealthCheckResult> CheckHealthAsync(
           HealthCheckContext context,
@@ -15,15 +15,15 @@ public class ApplicationHealthCheck : IHealthCheck
             var version = assembly.GetName().Version?.ToString() ?? "Unknown";
             var buildDate = GetBuildDate(assembly);
 
-            var data = new Dictionary<string, object>
-{
-    { "Version", version },
- { "BuildDate", buildDate },
-  { "Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown" },
-{ "MachineName", Environment.MachineName },
-{ "ProcessorCount", Environment.ProcessorCount },
-{ "WorkingSet", Environment.WorkingSet }
-      };
+            var data = new Dictionary<string, object>(capacity: 6)
+            {
+                { "Version", version },
+                { "BuildDate", buildDate },
+                { "Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Unknown" },
+                { "MachineName", Environment.MachineName },
+                { "ProcessorCount", Environment.ProcessorCount },
+                { "WorkingSet", Environment.WorkingSet }
+            };
 
             return Task.FromResult(HealthCheckResult.Healthy("Application is running", data));
         }

@@ -9,7 +9,7 @@ using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 
 namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Repositories
 {
-    internal class ClientRepository(
+    internal sealed class ClientRepository(
         ClientDbContext context,
         ILogger<ClientRepository> logger) : IClientRepository
     {
@@ -51,7 +51,7 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
 
             if (entities.Count == 0)
             {
-                logger.LogInformation("No legal clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
+                logger.LogDebug("No legal clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
             }
 
@@ -68,7 +68,7 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Client.Reposi
 
             if (entities.Count == 0)
             {
-                logger.LogInformation("No natural clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
+                logger.LogDebug("No natural clients found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
                 return ClientErrorBuilder.NoDocumentTypeRecordsFoundException();
             }
 

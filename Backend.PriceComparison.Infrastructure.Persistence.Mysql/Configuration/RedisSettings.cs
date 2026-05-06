@@ -15,4 +15,15 @@ public class RedisSettings
     /// <summary>Default TTL applied when a cache entry is stored without an explicit expiration.</summary>
     [Range(1, int.MaxValue, ErrorMessage = "Redis CacheExpirationMinutes must be a positive integer.")]
     public int CacheExpirationMinutes { get; set; } = 3600;
+
+    /// <summary>Abort on connection failure. Defaults to false for resilience.</summary>
+    public bool AbortConnect { get; set; } = false;
+
+    /// <summary>Sync operation timeout in milliseconds.</summary>
+    [Range(1000, 30000)]
+    public int SyncTimeoutMs { get; set; } = 3000;
+
+    /// <summary>Connection timeout in milliseconds.</summary>
+    [Range(1000, 30000)]
+    public int ConnectTimeoutMs { get; set; } = 3000;
 }

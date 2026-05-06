@@ -7,7 +7,7 @@ using Backend.PriceComparison.Domain.ClientPos.Models.Enums;
 
 namespace Backend.PriceComparison.Application.Client.Services;
 
-public class ClientQueryService(IMediator mediator) : IClientQueryService
+public sealed class ClientQueryService(IMediator mediator) : IClientQueryService
 {
     public async Task<Result<IEnumerable<ClientDto>, Error>> GetAllLegalClientsAsync(
         int pageNumber,

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Backend.PriceComparison.Application.Client;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Application.Client.Dtos;
@@ -7,7 +8,7 @@ using Backend.PriceComparison.Domain.Ports;
 
 namespace Backend.PriceComparison.Application.Client.Queries.Client;
 
-public class GetClientByIdQueryHandler(
+public sealed class GetClientByIdQueryHandler(
     IClientRepository _clientRepository,
     IMapper _mapper,
     ICacheService _cacheService)
@@ -17,7 +18,7 @@ public class GetClientByIdQueryHandler(
         GetClientByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"client:{request.Type}:{request.Id}";
+        var cacheKey = CacheKeys.ClientById(request.Id, request.Type.ToString());
 
         var cached = await _cacheService.GetAsync<ClientDto>(cacheKey, cancellationToken);
         if (cached is not null)

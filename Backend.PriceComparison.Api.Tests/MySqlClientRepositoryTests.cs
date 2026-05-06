@@ -127,7 +127,7 @@ public class MySqlClientRepositoryTests : IClassFixture<MySqlIntegrationTestFact
 
         var response = await client.GetAsync("/api/v1/client/natural/99999");
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         var body = await response.Content.ReadAsStringAsync();
         var json = JsonDocument.Parse(body);

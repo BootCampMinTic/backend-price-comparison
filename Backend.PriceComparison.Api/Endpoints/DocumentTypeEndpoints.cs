@@ -26,8 +26,6 @@ public static class DocumentTypeEndpoints
     {
         var result = await mediator.Send(new GetAllDocumentTypeQuery());
         return result.Match(
-            onSuccess => TypedResults.Ok(onSuccess),
-            onFailure => TypedResults.BadRequest(onFailure)
-        );
+            onSuccess => TypedResults.Ok(onSuccess));
     }
 }

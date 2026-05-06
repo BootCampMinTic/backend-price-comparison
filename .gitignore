@@ -420,3 +420,6 @@ FodyWeavers.xsd
 # Claude Code skills (regenerated from skills-lock.json)
 .agents/
 .claude/skills/
+
+# opencode workspace config (may contain credentials)
+opencode.json

@@ -1,5 +1,6 @@
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
+using System.Net;
 
 namespace Backend.PriceComparison.Api.Common.Extensions;
 
@@ -8,15 +9,6 @@ public static class ResultExtension
     public static IResult Match<TValue, TError>(
         this Result<TValue, TError> result,
         Func<TValue, IResult> onSuccess)
-        where TError : Error
-    {
-        return result.IsSuccess ? onSuccess(result.Value!) : result.ToErrorResult();
-    }
-
-    public static IResult Match<TValue, TError>(
-        this Result<TValue, TError> result,
-        Func<TValue, IResult> onSuccess,
-        Func<object, object> _)
         where TError : Error
     {
         return result.IsSuccess ? onSuccess(result.Value!) : result.ToErrorResult();

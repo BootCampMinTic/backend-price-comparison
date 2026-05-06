@@ -1,13 +1,32 @@
 namespace Backend.PriceComparison.Api.Middleware;
 
-public class BearerTokenMiddleware(
+public sealed class BearerTokenMiddleware(
     RequestDelegate next,
     ILogger<BearerTokenMiddleware> logger,
     IWebHostEnvironment environment)
 {
+    private static readonly string[] PublicEndpoints =
+    [
+        "/api/v1/health",
+        "/health",
+        "/openapi",
+        "/scalar",
+        "/index.html",
+        "/_framework",
+        "/_vs",
+        "/css",
+        "/js"
+    ];
+
+    private static readonly string[] DevOnlyEndpoints =
+    [
+        "/api/v1/dev",
+        "/"
+    ];
+
     public async Task InvokeAsync(HttpContext context)
     {
-        var path = context.Request.Path.Value?.ToLower();
+        var path = context.Request.Path.Value;
 
         if (IsPublicEndpoint(path))
         {
@@ -38,26 +57,22 @@ public class BearerTokenMiddleware(
         if (string.IsNullOrEmpty(path))
             return false;
 
-        var publicEndpoints = new List<string>
+        foreach (var endpoint in PublicEndpoints)
         {
-            "/api/v1/health",
-            "/health",
-            "/openapi",
-            "/scalar",
-            "/index.html",
-            "/_framework",
-            "/_vs",
-            "/css",
-            "/js"
-        };
+            if (path.StartsWith(endpoint, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
 
         if (environment.IsDevelopment())
         {
-            publicEndpoints.Add("/api/v1/dev");
-            publicEndpoints.Add("/"); // Allow root in development
+            foreach (var endpoint in DevOnlyEndpoints)
+            {
+                if (path.StartsWith(endpoint, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
         }
 
-        return publicEndpoints.Any(endpoint => path.StartsWith(endpoint));
+        return false;
     }
 
     private static string? ExtractToken(HttpContext context)

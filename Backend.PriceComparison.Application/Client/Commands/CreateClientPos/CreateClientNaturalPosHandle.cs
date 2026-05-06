@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Backend.PriceComparison.Application.Client;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Ports;
@@ -7,7 +8,7 @@ using Backend.PriceComparison.Domain.ClientPos.Entities;
 
 namespace Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 
-public class CreateClientNaturalPosHandle(
+public sealed class CreateClientNaturalPosHandle(
     IClientRepository _clientRepository,
     IMapper _mapper,
     ICacheService _cacheService)
@@ -23,7 +24,7 @@ public class CreateClientNaturalPosHandle(
         if (!result.IsSuccess)
             return result.Error!;
 
-        await _cacheService.RemoveByPrefixAsync("clients:natural", cancellationToken);
+        await _cacheService.RemoveByPrefixAsync(CacheKeys.ClientsNaturalPrefix, cancellationToken);
         return VoidResult.Instance;
     }
 }

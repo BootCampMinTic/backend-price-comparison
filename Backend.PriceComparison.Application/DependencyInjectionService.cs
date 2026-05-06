@@ -16,7 +16,7 @@ public static class DependencyInjectionService
         #region Mappers
         var mapper = new MapperConfiguration(config =>
         {
-            config.AddProfile(new ClientProfile());
+            config.AddProfile<ClientProfile>();
         });
         services.AddSingleton(mapper.CreateMapper());
         #endregion

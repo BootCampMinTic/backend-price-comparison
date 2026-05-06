@@ -3,6 +3,9 @@ using Backend.PriceComparison.Api.Common.Wrappers;
 using Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 using Backend.PriceComparison.Application.Client.Dtos;
 using Backend.PriceComparison.Application.Client.Services;
+using System.Net;
+using Backend.PriceComparison.Domain.Common.Results;
+using Backend.PriceComparison.Domain.Common.Results.Errors;
 
 namespace Backend.PriceComparison.Api.Endpoints;
 
@@ -82,6 +85,17 @@ public static class ClientEndpoints
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
     }
 
+    private static IResult ErrorResponse<T>(Error error)
+    {
+        var apiResponse = ApiResponse<T>.ErrorResponse(error.Description);
+        return error.HttpStatusCode switch
+        {
+            HttpStatusCode.NotFound => TypedResults.NotFound(apiResponse),
+            HttpStatusCode.InternalServerError => TypedResults.Json(apiResponse, statusCode: (int)HttpStatusCode.InternalServerError),
+            _ => TypedResults.BadRequest(apiResponse)
+        };
+    }
+
     private static async Task<IResult> CreateNaturalClient(
         [FromBody] CreateClientNaturalPosCommand createClientCommand,
         IClientCommandService commandService)
@@ -91,7 +105,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<object>.SuccessResponse(new { }, "Natural client created successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<object>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<object>(result.Error!);
     }
 
     private static async Task<IResult> CreateLegalClient(
@@ -103,7 +117,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<object>.SuccessResponse(new { }, "Legal client created successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<object>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<object>(result.Error!);
     }
 
     private static async Task<IResult> GetAllLegal(
@@ -116,7 +130,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(new PagedResponse<IEnumerable<ClientDto>>(result.Value!, pageNumber, pageSize));
 
-        return TypedResults.BadRequest(ApiResponse<IEnumerable<ClientDto>>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<IEnumerable<ClientDto>>(result.Error!);
     }
 
     private static async Task<IResult> GetAllNatural(
@@ -129,7 +143,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(new PagedResponse<IEnumerable<ClientDto>>(result.Value!, pageNumber, pageSize));
 
-        return TypedResults.BadRequest(ApiResponse<IEnumerable<ClientDto>>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<IEnumerable<ClientDto>>(result.Error!);
     }
 
     private static async Task<IResult> GetNaturalClientById(
@@ -141,7 +155,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<ClientDto>.SuccessResponse(result.Value!, "Client retrieved successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<ClientDto>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<ClientDto>(result.Error!);
     }
 
     private static async Task<IResult> GetLegalClientById(
@@ -153,7 +167,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<ClientDto>.SuccessResponse(result.Value!, "Client retrieved successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<ClientDto>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<ClientDto>(result.Error!);
     }
 
     private static async Task<IResult> GetNaturalClientByDocumentNumber(
@@ -165,7 +179,7 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<ClientDto>.SuccessResponse(result.Value!, "Client retrieved successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<ClientDto>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<ClientDto>(result.Error!);
     }
 
     private static async Task<IResult> GetLegalClientByDocumentNumber(
@@ -177,6 +191,6 @@ public static class ClientEndpoints
         if (result.IsSuccess)
             return TypedResults.Ok(ApiResponse<ClientDto>.SuccessResponse(result.Value!, "Client retrieved successfully"));
 
-        return TypedResults.BadRequest(ApiResponse<ClientDto>.ErrorResponse(result.Error!.Description));
+        return ErrorResponse<ClientDto>(result.Error!);
     }
 }

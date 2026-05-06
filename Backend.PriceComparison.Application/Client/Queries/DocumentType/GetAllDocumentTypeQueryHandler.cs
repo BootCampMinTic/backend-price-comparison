@@ -1,4 +1,5 @@
 using MediatR;
+using Backend.PriceComparison.Application.Client;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Application.Client.Dtos;
@@ -6,12 +7,12 @@ using Backend.PriceComparison.Domain.Ports;
 
 namespace Backend.PriceComparison.Application.Client.Queries.DocumentType;
 
-public class GetAllDocumentTypeQueryHandler(
+public sealed class GetAllDocumentTypeQueryHandler(
     IDocumentTypeRepository _documentTypeRepository,
     ICacheService _cacheService)
     : IRequestHandler<GetAllDocumentTypeQuery, Result<ApiResponseDto<IEnumerable<DocumentTypeDto>>, Error>>
 {
-    private const string CacheKey = "documenttypes:all";
+    private const string CacheKey = CacheKeys.DocumentTypesAll;
 
     public async Task<Result<ApiResponseDto<IEnumerable<DocumentTypeDto>>, Error>> Handle(
         GetAllDocumentTypeQuery request,

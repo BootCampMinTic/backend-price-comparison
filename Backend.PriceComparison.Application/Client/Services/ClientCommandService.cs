@@ -5,7 +5,7 @@ using Backend.PriceComparison.Application.Client.Commands.CreateClientPos;
 
 namespace Backend.PriceComparison.Application.Client.Services;
 
-public class ClientCommandService(IMediator mediator) : IClientCommandService
+public sealed class ClientCommandService(IMediator mediator) : IClientCommandService
 {
     public async Task<Result<VoidResult, Error>> CreateNaturalClientAsync(
         CreateClientNaturalPosCommand command,

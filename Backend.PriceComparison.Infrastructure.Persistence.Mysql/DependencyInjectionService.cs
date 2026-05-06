@@ -32,8 +32,8 @@ public static class DependencyInjectionService
 
         var connectionString = Environment.GetEnvironmentVariable("MYSQL_CONNECTION") ?? configuration.GetConnectionString("MysqlConnection");
         services.AddDbContext<ClientDbContext>(
-            options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)
-        ));
+            options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+                mySqlOptions => mySqlOptions.EnableRetryOnFailure(maxRetryCount: 3)));
 
         services.AddOptions<RedisSettings>()
             .Bind(configuration.GetSection("Redis"))
@@ -50,7 +50,7 @@ public static class DependencyInjectionService
         {
             var settings = sp.GetRequiredService<IOptions<RedisSettings>>().Value;
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger("Backend.PriceComparison.Infrastructure.Persistence.Mysql.Cache");
+            var logger = loggerFactory.CreateLogger(typeof(RedisCacheService).FullName!);
 
             if (string.IsNullOrWhiteSpace(settings.ConnectionString))
             {
@@ -58,7 +58,7 @@ public static class DependencyInjectionService
                 return new InMemoryCacheService();
             }
 
-            var config = $"{settings.ConnectionString},abortConnect=false,syncTimeout=3000,connectTimeout=3000";
+            var config = $"{settings.ConnectionString},abortConnect={settings.AbortConnect.ToString().ToLower()},syncTimeout={settings.SyncTimeoutMs},connectTimeout={settings.ConnectTimeoutMs}";
             try
             {
                 var multiplexer = ConnectionMultiplexer.Connect(config);
