@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Backend.PriceComparison.Application.Common.Behaviors;
 using Backend.PriceComparison.Application.Client.Mappers;
 using Backend.PriceComparison.Application.Client.Services;
+using Backend.PriceComparison.Application.Store.Mappers;
 using System.Reflection;
 using FluentValidation;
 
@@ -17,6 +18,7 @@ public static class DependencyInjectionService
         var mapper = new MapperConfiguration(config =>
         {
             config.AddProfile<ClientProfile>();
+            config.AddProfile<StoreProfile>();
         });
         services.AddSingleton(mapper.CreateMapper());
         #endregion

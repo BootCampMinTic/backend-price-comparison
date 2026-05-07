@@ -6,22 +6,19 @@ namespace Backend.PriceComparison.Api.Extensions
 {
     public static class HealthCheckExtensions
  {
-     public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services)
-      {
-       services.AddHealthChecks()
-         // Application basic health check
+      public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services)
+       {
+        services.AddHealthChecks()
  .AddCheck<ApplicationHealthCheck>(
      "application",
       HealthStatus.Unhealthy,
       tags: ["ready", "live"])
-   
-   // Database connectivity check
-      .AddCheck<DatabaseHealthCheck>(
+
+   .AddCheck<DatabaseHealthCheck>(
   "database",
  HealthStatus.Unhealthy,
     tags: ["ready"])
-       
- // Entity Framework specific health check
+
     .AddDbContextCheck<ClientDbContext>(
        "ef-database",
     HealthStatus.Unhealthy,

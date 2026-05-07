@@ -57,8 +57,7 @@ app.MapScalarApiReference(options =>
         .WithTitle("backend-price-comparison API")
         .WithTheme(ScalarTheme.Purple)
         .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)
-        .WithPreferredScheme("Bearer")
-        .WithApiKeyAuthentication(x => x.Token = "");
+        .WithBundleUrl("https://cdn.jsdelivr.net/npm/@scalar/api-reference");
 });
 
 // Health checks
@@ -71,6 +70,14 @@ app.UseMiddleware<BearerTokenMiddleware>();
 app.MapClientEndpoints();
 app.MapDocumentTypeEndpoints();
 app.MapHealthApiEndpoints();
+
+app.MapCatalogEndpoints();
+app.MapCategoryProductEndpoints();
+app.MapCategoryStoreEndpoints();
+app.MapStoreEndpoints();
+app.MapProductEndpoints();
+app.MapUserEndpoints();
+app.MapSaleEndpoints();
 
 app.Run();
 

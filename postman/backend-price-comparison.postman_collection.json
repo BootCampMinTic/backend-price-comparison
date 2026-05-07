@@ -1,0 +1,621 @@
+{
+	"info": {
+		"name": "backend-price-comparison API",
+		"description": "Coleccion de todos los endpoints del backend de comparacion de precios.\n\nBase URL: http://localhost:8080\nAutenticacion: Bearer token (cualquier valor)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "test",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Get Full Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health"]
+						},
+						"description": "Health check completo con estado de todos los componentes"
+					}
+				},
+				{
+					"name": "Get Liveness",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health/live",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health", "live"]
+						},
+						"description": "Liveness probe — solo chequea que la app este viva"
+					}
+				},
+				{
+					"name": "Get Readiness",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health/ready",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health", "ready"]
+						},
+						"description": "Readiness probe — incluye chequeo de base de datos"
+					}
+				}
+			]
+		},
+		{
+			"name": "Catalog",
+			"item": [
+				{
+					"name": "States",
+					"item": [
+						{
+							"name": "Get All States",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/states",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "states"]
+								},
+								"description": "Obtener todos los estados (Pendiente, Completada, Cancelada)"
+							}
+						}
+					]
+				},
+				{
+					"name": "Type Users",
+					"item": [
+						{
+							"name": "Get All Type Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/type-users",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "type-users"]
+								},
+								"description": "Obtener todos los tipos de usuario (Administrador, Cliente)"
+							}
+						}
+					]
+				},
+				{
+					"name": "Category Products",
+					"item": [
+						{
+							"name": "Get All Category Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-products",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-products"]
+								},
+								"description": "Obtener todas las categorias de producto"
+							}
+						},
+						{
+							"name": "Get Category Product by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-products/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-products", "1"]
+								},
+								"description": "Obtener una categoria de producto por ID"
+							}
+						},
+						{
+							"name": "Create Category Product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"description\": \"Electrodomesticos\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-products",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-products"]
+								},
+								"description": "Crear una nueva categoria de producto"
+							}
+						}
+					]
+				},
+				{
+					"name": "Category Stores",
+					"item": [
+						{
+							"name": "Get All Category Stores",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-stores",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-stores"]
+								},
+								"description": "Obtener todas las categorias de tienda"
+							}
+						},
+						{
+							"name": "Get Category Store by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-stores/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-stores", "1"]
+								},
+								"description": "Obtener una categoria de tienda por ID"
+							}
+						},
+						{
+							"name": "Create Category Store",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"description\": \"Farmacia\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/category-stores",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "category-stores"]
+								},
+								"description": "Crear una nueva categoria de tienda"
+							}
+						}
+					]
+				},
+				{
+					"name": "Document Types",
+					"item": [
+						{
+							"name": "Get All Document Types",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/document-type",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "document-type"]
+								},
+								"description": "Obtener todos los tipos de documento (CC, CE, NIT, PP, RC)"
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Get All Stores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/stores?pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "stores"],
+							"query": [
+								{ "key": "pageNumber", "value": "1" },
+								{ "key": "pageSize", "value": "10" }
+							]
+						},
+						"description": "Obtener tiendas paginadas con su categoria"
+					}
+				},
+				{
+					"name": "Get Store by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/stores/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "stores", "1"]
+						},
+						"description": "Obtener una tienda por ID con su categoria"
+					}
+				},
+				{
+					"name": "Create Store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Tienda Nueva\",\n  \"address\": \"Calle 80 #45-67\",\n  \"phone\": \"3201112233\",\n  \"categoryStoreId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/stores",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "stores"]
+						},
+						"description": "Crear una nueva tienda"
+					}
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products?pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products"],
+							"query": [
+								{ "key": "pageNumber", "value": "1" },
+								{ "key": "pageSize", "value": "10" }
+							]
+						},
+						"description": "Obtener productos paginados con tienda y categoria"
+					}
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products", "1"]
+						},
+						"description": "Obtener un producto por ID con tienda y categoria"
+					}
+				},
+				{
+					"name": "Get Products by Store",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/stores/1/products?pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "stores", "1", "products"],
+							"query": [
+								{ "key": "pageNumber", "value": "1" },
+								{ "key": "pageSize", "value": "10" }
+							]
+						},
+						"description": "Obtener productos filtrados por tienda"
+					}
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Cafe (500g)\",\n  \"price\": 8500,\n  \"storeId\": 1,\n  \"categoryProductId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "products"]
+						},
+						"description": "Crear un nuevo producto asociado a una tienda y categoria"
+					}
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "users"]
+						},
+						"description": "Obtener todos los usuarios con su tipo"
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "users", "1"]
+						},
+						"description": "Obtener un usuario por ID con su tipo"
+					}
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Pedro Lopez\",\n  \"password\": \"pass789\",\n  \"typeUserId\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "users"]
+						},
+						"description": "Crear un nuevo usuario con su tipo"
+					}
+				}
+			]
+		},
+		{
+			"name": "Sale",
+			"item": [
+				{
+					"name": "Get All Sales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sales?pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "sales"],
+							"query": [
+								{ "key": "pageNumber", "value": "1" },
+								{ "key": "pageSize", "value": "10" }
+							]
+						},
+						"description": "Obtener ventas paginadas con usuario, tienda, estado y productos"
+					}
+				},
+				{
+					"name": "Get Sale by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sales/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "sales", "1"]
+						},
+						"description": "Obtener una venta por ID con detalle de productos"
+					}
+				},
+				{
+					"name": "Create Sale",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 2,\n  \"storeId\": 1,\n  \"stateId\": 1,\n  \"date\": \"2026-05-06T10:00:00Z\",\n  \"productIds\": [1, 2, 3]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sales",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "sales"]
+						},
+						"description": "Crear una nueva venta con productos asociados"
+					}
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Natural Clients",
+					"item": [
+						{
+							"name": "Get All Natural Clients",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/natural?pageNumber=1&pageSize=5",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "natural"],
+									"query": [
+										{ "key": "pageNumber", "value": "1" },
+										{ "key": "pageSize", "value": "5" }
+									]
+								},
+								"description": "Obtener clientes persona natural paginados"
+							}
+						},
+						{
+							"name": "Get Natural Client by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/natural/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "natural", "1"]
+								},
+								"description": "Obtener un cliente natural por ID"
+							}
+						},
+						{
+							"name": "Get Natural Client by Document",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/natural/12345678/document-number",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "natural", "12345678", "document-number"]
+								},
+								"description": "Buscar cliente natural por numero de documento"
+							}
+						},
+						{
+							"name": "Create Natural Client",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Pedro\",\n  \"middleName\": \"Antonio\",\n  \"lastName\": \"Ramirez\",\n  \"secondSurname\": \"Lopez\",\n  \"documentNumber\": \"1034567890\",\n  \"electronicInvoiceEmail\": \"pedro@email.com\",\n  \"documentTypeId\": 1,\n  \"documentCountry\": \"CO\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/natural",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "natural"]
+								},
+								"description": "Crear un nuevo cliente persona natural"
+							}
+						}
+					]
+				},
+				{
+					"name": "Legal Clients",
+					"item": [
+						{
+							"name": "Get All Legal Clients",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/legal?pageNumber=1&pageSize=5",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "legal"],
+									"query": [
+										{ "key": "pageNumber", "value": "1" },
+										{ "key": "pageSize", "value": "5" }
+									]
+								},
+								"description": "Obtener clientes persona juridica paginados"
+							}
+						},
+						{
+							"name": "Get Legal Client by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/legal/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "legal", "1"]
+								},
+								"description": "Obtener un cliente juridico por ID"
+							}
+						},
+						{
+							"name": "Get Legal Client by Document",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/legal/9001234567/document-number",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "legal", "9001234567", "document-number"]
+								},
+								"description": "Buscar cliente juridico por NIT"
+							}
+						},
+						{
+							"name": "Create Legal Client",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"companyName\": \"Empresa Demo SAS\",\n  \"verificationDigit\": 5,\n  \"documentNumber\": \"901234567\",\n  \"electronicInvoiceEmail\": \"facturas@empresademo.com\",\n  \"vatResponsibleParty\": true,\n  \"selfRetainer\": false,\n  \"withholdingAgent\": true,\n  \"simpleTaxRegime\": false,\n  \"documentTypeId\": 3,\n  \"largeTaxpayer\": false,\n  \"documentCountry\": \"CO\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/client/legal",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "client", "legal"]
+								},
+								"description": "Crear un nuevo cliente persona juridica"
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
