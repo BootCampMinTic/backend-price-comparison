@@ -21,6 +21,9 @@ internal sealed class SaleRepository(
             .Include(s => s.User)
             .Include(s => s.Store)
             .Include(s => s.State)
+            .Include(s => s.ProductSales)
+                .ThenInclude(ps => ps.Product)
+            .OrderByDescending(s => s.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

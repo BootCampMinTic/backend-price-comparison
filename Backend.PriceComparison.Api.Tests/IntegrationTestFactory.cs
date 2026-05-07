@@ -33,14 +33,6 @@ public class IntegrationTestFactory : WebApplicationFactory<Program>, IAsyncLife
 
         builder.ConfigureServices(services =>
         {
-            var clientRepoDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IClientRepository));
-            if (clientRepoDescriptor is not null) services.Remove(clientRepoDescriptor);
-            services.AddScoped<IClientRepository>(_ => new WireMockClientRepository(new HttpClient { BaseAddress = new Uri(baseUrl) }, baseUrl));
-
-            var docTypeRepoDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IDocumentTypeRepository));
-            if (docTypeRepoDescriptor is not null) services.Remove(docTypeRepoDescriptor);
-            services.AddScoped<IDocumentTypeRepository>(_ => new WireMockDocumentTypeRepository(new HttpClient { BaseAddress = new Uri(baseUrl) }, baseUrl));
-
             var cacheDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(ICacheService));
             if (cacheDescriptor is not null) services.Remove(cacheDescriptor);
             services.AddSingleton<ICacheService, InMemoryCacheService>();

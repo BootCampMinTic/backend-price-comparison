@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Backend.PriceComparison.Application.Client;
+using Backend.PriceComparison.Application.Common;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Store.Entities;
@@ -19,10 +19,9 @@ public sealed class CreateSaleCommandHandler(
         CancellationToken cancellationToken)
     {
         var sale = _mapper.Map<SaleEntity>(request);
-        int psCounter = 1;
         foreach (var productId in request.ProductIds)
         {
-            sale.ProductSales.Add(new ProductSaleEntity { Id = psCounter++, ProductId = productId, Sale = sale });
+            sale.ProductSales.Add(new ProductSaleEntity { ProductId = productId, Sale = sale });
         }
 
         var result = await _saleRepository.CreateAsync(sale, cancellationToken);

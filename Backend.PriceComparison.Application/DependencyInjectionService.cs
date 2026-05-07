@@ -2,8 +2,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Backend.PriceComparison.Application.Common.Behaviors;
-using Backend.PriceComparison.Application.Client.Mappers;
-using Backend.PriceComparison.Application.Client.Services;
 using Backend.PriceComparison.Application.Store.Mappers;
 using System.Reflection;
 using FluentValidation;
@@ -17,7 +15,6 @@ public static class DependencyInjectionService
         #region Mappers
         var mapper = new MapperConfiguration(config =>
         {
-            config.AddProfile<ClientProfile>();
             config.AddProfile<StoreProfile>();
         });
         services.AddSingleton(mapper.CreateMapper());
@@ -30,11 +27,6 @@ public static class DependencyInjectionService
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehaviour<,>)
         );
-
-        #region Client Services
-        services.AddScoped<IClientQueryService, ClientQueryService>();
-        services.AddScoped<IClientCommandService, ClientCommandService>();
-        #endregion
 
         return services;
     }

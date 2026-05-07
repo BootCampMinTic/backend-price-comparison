@@ -27,7 +27,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BackendPriceComparison", policy =>
     {
-        var allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>() ?? ["*"];
+        var originsValue = Environment.GetEnvironmentVariable("AllowedOrigins");
+        List<string> allowedOrigins;
+
+        if (!string.IsNullOrWhiteSpace(originsValue))
+        {
+            allowedOrigins = originsValue
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .ToList();
+        }
+        else
+        {
+            allowedOrigins = config.GetSection("AllowedOrigins").Get<List<string>>() ?? ["*"];
+        }
+
         policy.WithOrigins([.. allowedOrigins])
      .AllowAnyMethod()
        .AllowAnyHeader()
@@ -67,8 +80,6 @@ app.UseHealthCheckEndpoints();
 app.UseMiddleware<BearerTokenMiddleware>();
 
 // Map Minimal API endpoints
-app.MapClientEndpoints();
-app.MapDocumentTypeEndpoints();
 app.MapHealthApiEndpoints();
 
 app.MapCatalogEndpoints();

@@ -1,5 +1,4 @@
 using Backend.PriceComparison.Domain.Common.Results.Errors;
-using Backend.PriceComparison.Domain.Common.Results.Errors;
 using System.Net;
 
 namespace Backend.PriceComparison.Domain.Test;
@@ -14,15 +13,5 @@ public class ErrorTests
         Assert.Equal("ValidationError", error.Code);
         Assert.Equal("Invalid input.", error.Description);
         Assert.Equal(HttpStatusCode.BadRequest, error.HttpStatusCode);
-    }
-
-    [Fact]
-    public void ClientNotFound_ById_CreatesNotFoundError()
-    {
-        var error = ClientErrorBuilder.ClientNotFoundException(10);
-        Assert.Equal(ClientErrorBuilder.CLIENT_NOT_FOUND_ERROR, error.Code);
-
-        Assert.Equal(HttpStatusCode.NotFound, error.HttpStatusCode);
-        Assert.Contains("10", error.Description);
     }
 }

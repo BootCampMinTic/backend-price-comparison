@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Backend.PriceComparison.Application.Client;
+using Backend.PriceComparison.Application.Common;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Store.Entities;
