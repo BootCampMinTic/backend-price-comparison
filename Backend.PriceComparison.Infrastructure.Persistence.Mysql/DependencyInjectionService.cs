@@ -64,16 +64,6 @@ public static class DependencyInjectionService
 
         services.AddSingleton<IMessageProvider, MessageProvider>();
 
-        services.AddScoped<IStateRepository, StateRepository>();
-        services.AddScoped<ITypeUserRepository, TypeUserRepository>();
-        services.AddScoped<ICategoryProductRepository, CategoryProductRepository>();
-        services.AddScoped<ICategoryStoreRepository, CategoryStoreRepository>();
-        services.AddScoped<IStoreRepository, StoreRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ISaleRepository, SaleRepository>();
-        services.AddScoped<IProductSaleRepository, ProductSaleRepository>();
-
         return services;
     }
 }
