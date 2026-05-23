@@ -1,6 +1,6 @@
-# backend-api-eds-client
+# backend-price-comparison
 
-API de comparacion de precios. El proyecto expone endpoints HTTP para crear y consultar clientes naturales, clientes juridicos y tipos de documento, usando ASP.NET Core Minimal APIs, MediatR, Entity Framework Core, MySQL y Redis.
+API de comparacion de precios basada en ASP.NET Core Minimal APIs con arquitectura hexagonal (Puertos y Adaptadores). Este proyecto sirve como **ejemplo base** para que desarrolladores junior aprendan el patron de creacion de servicios completos — el endpoint **Product** es el ejemplo canonico.
 
 ## Contenido
 
@@ -10,300 +10,177 @@ API de comparacion de precios. El proyecto expone endpoints HTTP para crear y co
 - [Configuracion](#configuracion)
 - [Ejecucion local](#ejecucion-local)
 - [Documentacion de la API](#documentacion-de-la-api)
-- [Endpoints principales](#endpoints-principales)
+- [Endpoints](#endpoints)
 - [Health checks](#health-checks)
 - [Pruebas](#pruebas)
 - [Docker](#docker)
-- [CI/CD](#cicd)
-- [Notas de mantenimiento](#notas-de-mantenimiento)
+- [Guia: Crear un nuevo servicio](#guia-crear-un-nuevo-servicio)
 
 ## Arquitectura
 
-La solucion principal es `backend-price-comparison.sln` y esta organizada por capas:
+La solucion usa **Hexagonal / Puertos y Adaptadores** organizada por capas:
+
+`
+Api —? Application —? Domain ?— Infrastructure.Persistence.Mysql
+                                    (adapter side)
+`
 
 | Proyecto | Responsabilidad |
 | --- | --- |
-| `Backend.PriceComparison.Api` | Punto de entrada HTTP. Configura Minimal APIs, CORS, Scalar/OpenAPI, Redis, health checks y middleware de token Bearer. |
-| `Backend.PriceComparison.Application` | Casos de uso, comandos, queries, servicios de aplicacion, MediatR, AutoMapper y validaciones. |
-| `Backend.PriceComparison.Domain` | Entidades, contratos de dominio, modelos comunes y resultados. |
-| `Backend.PriceComparison.Infrastructure.Persistence.Mysql` | Persistencia MySQL con Entity Framework Core y servicios de dominio concretos. |
-| `Backend.PriceComparison.Api.Tests` | Proyecto de pruebas xUnit para la API. |
-| `Backend.PriceComparison.Domain.Test` | Proyecto de pruebas xUnit para dominio. |
+| Backend.PriceComparison.Api | Punto de entrada HTTP. Minimal APIs, CORS, Scalar/OpenAPI, Redis, health checks y middleware Bearer. |
+| Backend.PriceComparison.Application | Casos de uso: commands/queries con MediatR, AutoMapper, FluentValidation. |
+| Backend.PriceComparison.Domain | Entidades, puertos (interfaces), resultados Result<T, Error>. Sin dependencias externas. |
+| Backend.PriceComparison.Infrastructure.Persistence.Mysql | Implementaciones concretas de los puertos: EF Core + MySQL, Redis, mocks en memoria. |
+| Backend.PriceComparison.Api.Tests | Pruebas xUnit de integracion. |
+| Backend.PriceComparison.Domain.Test | Pruebas xUnit de dominio. |
 
-Tambien existen carpetas auxiliares como `LoadTest`, `WorkerServiceBilling`, `Backend.PriceComparison.Common`, `Backend.PriceComparison.Infrastructure.External.Plemsi` y `Backend.PriceComparison.Infrastructure.External.TNS`. No todas estan incluidas en la solucion principal.
+### Flujo de datos (usando Product como ejemplo):
+
+`
+HTTP Request
+  -> ProductEndpoints (API)
+    -> IMediator.Send(GetAllProductsQuery)  (Application)
+      -> GetAllProductsQueryHandler
+        -> ICacheService.GetAsync()         <- si esta en cache, retorna
+        -> IProductRepository.GetAllAsync() (Domain port)
+          -> ProductRepository               (Infrastructure adapter)
+            -> EF Core / MySQL
+        -> ICacheService.SetAsync()
+      -> Result<ProductDto, Error>
+    -> ApiResponse<PagedResponse<ProductDto>>
+  -> HTTP Response
+`
 
 ## Tecnologias principales
 
-- .NET `10.0` para la API y los proyectos principales de cliente.
-- ASP.NET Core Minimal APIs.
-- Entity Framework Core `9.0` con `Pomelo.EntityFrameworkCore.MySql`.
-- MySQL como base de datos.
-- Redis con `StackExchange.Redis`.
-- MediatR para comandos y queries.
-- AutoMapper para mapeos entre comandos, entidades y DTOs.
-- FluentValidation para el pipeline de validacion.
-- Scalar para visualizar la documentacion OpenAPI.
-- xUnit y coverlet para pruebas.
-- Docker y GitHub Actions para build/deploy.
+- .NET 10.0
+- ASP.NET Core Minimal APIs
+- Entity Framework Core 9.0 con Pomelo.EntityFrameworkCore.MySql
+- MySQL
+- Redis con StackExchange.Redis
+- MediatR (commands/queries)
+- AutoMapper (entidad <-> DTO)
+- FluentValidation (pipeline de validacion)
+- Scalar (documentacion OpenAPI)
+- xUnit + coverlet (pruebas)
 
 ## Requisitos
 
-- .NET SDK `10.0.x`.
-- MySQL accesible desde el entorno local o contenedor.
-- Redis accesible desde el entorno local o contenedor.
-- Docker, opcional para ejecutar en contenedor.
+- .NET SDK 10.0.x
+- MySQL (o usar mock)
+- Redis (o usar mock)
+- Docker (opcional)
 
 ## Configuracion
 
-La API toma configuracion desde `appsettings.json`, variables de entorno y `appsettings.Development.json`.
-
-> Importante: no publiques credenciales reales en el README, issues, logs o commits. Para desarrollo local, usa variables de entorno, User Secrets o un archivo local no versionado.
-
-Variables y claves relevantes:
-
-| Variable/clave | Uso |
+| Variable / clave | Uso |
 | --- | --- |
-| `MYSQL_CONNECTION` | Sobrescribe `ConnectionStrings:MysqlConnection`. Cadena de conexion a MySQL usada por EF Core. |
-| `REDIS_CONNECTION` | Sobrescribe `Redis:ConnectionString`. Conexion a Redis. |
-| `ConnectionStrings:MysqlConnection` | Cadena de conexion MySQL por configuracion. |
-| `Redis:ConnectionString` | Conexion Redis por configuracion. |
-| `Redis:CacheExpirationMinutes` | Tiempo por defecto de expiracion del cache. |
-| `AllowedOrigins` | Origenes permitidos por CORS. |
-| `ApiPlemsi:ApiKey` | Clave de integracion Plemsi, si aplica. |
-| `ApiPlemsi:PosUrl` | URL POS de Plemsi, si aplica. |
-| `ApiPlemsi:ApiUrl` | URL base/consulta de Plemsi, si aplica. |
-
-Ejemplo en PowerShell:
-
-```powershell
-$env:MYSQL_CONNECTION="Server=localhost;Port=3306;Database=clients;User Id=root;Password=local_password;ConvertZeroDateTime=True;SslMode=Disabled"
-$env:REDIS_CONNECTION="localhost:6379"
-$env:ASPNETCORE_ENVIRONMENT="Development"
-```
+| MYSQL_CONNECTION / ConnectionStrings:MysqlConnection | Cadena de conexion MySQL para EF Core. |
+| REDIS_CONNECTION / Redis:ConnectionString | Conexion a Redis. |
+| Redis:CacheExpirationMinutes | TTL por defecto del cache (default: 10). |
+| UseMockInfrastructure | 	rue -> usa repositorios en memoria (no necesita MySQL/Redis). |
+| AllowedOrigins | Origenes CORS. |
 
 ## Ejecucion local
 
-Restaura dependencias:
-
-```powershell
+`powershell
 dotnet restore .\backend-price-comparison.sln
-```
-
-Compila la solucion:
-
-```powershell
 dotnet build .\backend-price-comparison.sln -c Debug
-```
-
-Ejecuta la API:
-
-```powershell
 dotnet run --project .\Backend.PriceComparison.Api\Backend.PriceComparison.Api.csproj --launch-profile http
-```
+`
 
-Con el perfil `http`, la API queda publicada en:
-
-- `http://localhost:5062`
-- `https://localhost:5000`
+La API queda en http://localhost:5062 y https://localhost:5000.
 
 ## Documentacion de la API
 
-La documentacion interactiva esta disponible con Scalar:
-
-```text
+`	ext
 http://localhost:5062/scalar/v1
-```
-
-El documento OpenAPI se expone mediante `MapOpenApi`:
-
-```text
 http://localhost:5062/openapi/v1.json
-```
+`
 
-## Autenticacion
+## Endpoints
 
-La API usa `BearerTokenMiddleware`. Todos los endpoints no publicos requieren el header:
+Todos los endpoints requieren el header Authorization: Bearer <token>, excepto /health*, /openapi*, /scalar*.
 
-```http
-Authorization: Bearer <token>
-```
-
-Endpoints publicos:
-
-- `/health`
-- `/health/ready`
-- `/health/live`
-- `/api/v1/health`
-- `/openapi`
-- `/scalar`
-- recursos estaticos usados por la UI
-
-El middleware actual valida la presencia del token Bearer; no valida firma, expiracion ni claims.
-
-## Endpoints principales
-
-Base path:
-
-```text
-/api/v1
-```
+### Product
 
 | Metodo | Ruta | Descripcion |
 | --- | --- | --- |
-| `POST` | `/client/natural` | Crea un cliente natural. |
-| `POST` | `/client/legal` | Crea un cliente juridico. |
-| `GET` | `/client/natural?pageNumber=1&pageSize=10` | Lista clientes naturales paginados. |
-| `GET` | `/client/legal?pageNumber=1&pageSize=10` | Lista clientes juridicos paginados. |
-| `GET` | `/client/natural/{id}` | Consulta cliente natural por id. |
-| `GET` | `/client/legal/{id}` | Consulta cliente juridico por id. |
-| `GET` | `/client/natural/{number}/document-number` | Consulta cliente natural por numero de documento. |
-| `GET` | `/client/legal/{number}/document-number` | Consulta cliente juridico por numero de documento. |
-| `GET` | `/client/document-type` | Lista tipos de documento. |
+| GET | /api/v1/products?pageNumber=1&pageSize=10 | Lista productos paginados. |
+| GET | /api/v1/products/{id} | Producto por ID. |
+| GET | /api/v1/stores/{storeId}/products?pageNumber=1&pageSize=10 | Productos por tienda (paginado). |
+| POST | /api/v1/products | Crear un nuevo producto. |
 
-Ejemplo de consulta:
+Ejemplos:
 
-```bash
-curl -H "Authorization: Bearer dev-token" "http://localhost:5062/api/v1/client/natural?pageNumber=1&pageSize=10"
-```
+`ash
+curl -H "Authorization: Bearer dev-token" "http://localhost:5062/api/v1/products?pageNumber=1&pageSize=10"
+`
 
-Ejemplo de creacion de cliente natural:
-
-```json
+`json
 {
-  "name": "Juan",
-  "middleName": "Carlos",
-  "lastName": "Perez",
-  "secondSurname": "Gomez",
-  "documentNumber": "123456789",
-  "electronicInvoiceEmail": "cliente@example.com",
-  "documentTypeId": 1,
-  "documentCountry": "CO"
+  "name": "Producto Ejemplo",
+  "price": 25000.00,
+  "storeId": 1,
+  "categoryProductId": 1
 }
-```
-
-Ejemplo de creacion de cliente juridico:
-
-```json
-{
-  "companyName": "Empresa Demo SAS",
-  "verificationDigit": 5,
-  "documentNumber": "900123456",
-  "electronicInvoiceEmail": "facturacion@example.com",
-  "vatResponsibleParty": true,
-  "selfRetainer": false,
-  "withholdingAgent": false,
-  "simpleTaxRegime": false,
-  "documentTypeId": 1,
-  "largeTaxpayer": false,
-  "documentCountry": "CO"
-}
-```
+`
 
 ## Health checks
 
-La API configura health checks de aplicacion, base de datos y Entity Framework.
-
 | Metodo | Ruta | Uso |
 | --- | --- | --- |
-| `GET` | `/health` | Estado completo y detallado. |
-| `GET` | `/health/ready` | Readiness, incluye dependencias como base de datos. |
-| `GET` | `/health/live` | Liveness de la aplicacion. |
-| `GET` | `/api/v1/health` | Estado completo mediante endpoint versionado. |
-| `GET` | `/api/v1/health/ready` | Readiness versionado. |
-| `GET` | `/api/v1/health/live` | Liveness versionado. |
-
-Ejemplo:
-
-```bash
-curl -i http://localhost:5062/health/ready
-```
-
-Hay documentacion adicional en:
-
-- `Backend.PriceComparison.Api/HealthChecks/README.md`
-- `Backend.PriceComparison.Api/HealthChecks/TESTING.md`
+| GET | /health | Estado completo. |
+| GET | /health/ready | Readiness (incluye DB). |
+| GET | /health/live | Liveness. |
+| GET | /api/v1/health | Estado completo versionado. |
+| GET | /api/v1/health/ready | Readiness versionado. |
+| GET | /api/v1/health/live | Liveness versionado. |
 
 ## Pruebas
 
-Ejecuta todas las pruebas de la solucion:
-
-```powershell
+`powershell
 dotnet test .\backend-price-comparison.sln -c Release
-```
-
-Los proyectos de pruebas actuales usan xUnit:
-
-- `Backend.PriceComparison.Api.Tests`
-- `Backend.PriceComparison.Domain.Test`
+`
 
 ## Docker
 
-### Construir la imagen
-
-```powershell
+`powershell
+# Construir
 docker build -t backend-api-eds-client:local .
-```
 
-### Ejecutar el contenedor
-
-**Opcion A: con mocks (sin necesitar MySQL ni Redis)**
-
-Usa los repositorios e implementaciones en memoria definidos en `Backend.PriceComparison.Infrastructure.Persistence.Mysql/Mock`. Ideal para arrancar rapido en local.
-
-```powershell
-docker run -d --name backend-api-eds-client -p 8080:8080 `
-  -e ASPNETCORE_ENVIRONMENT=Development `
-  -e UseMockInfrastructure=true `
+# Ejecutar con mocks (sin MySQL/Redis)
+docker run -d --name backend-api-eds-client -p 8080:8080 
+  -e ASPNETCORE_ENVIRONMENT=Development 
+  -e UseMockInfrastructure=true 
   backend-api-eds-client:local
-```
 
-**Opcion B: con MySQL y Redis reales**
-
-```powershell
-docker run -d --name backend-api-eds-client -p 8080:8080 `
-  -e ASPNETCORE_ENVIRONMENT=Production `
-  -e MYSQL_CONNECTION="Server=host.docker.internal;Port=3306;Database=clients;User Id=root;Password=local_password;ConvertZeroDateTime=True;SslMode=Disabled" `
-  -e REDIS_CONNECTION="host.docker.internal:6379" `
+# Ejecutar con MySQL/Redis reales
+docker run -d --name backend-api-eds-client -p 8080:8080 
+  -e ASPNETCORE_ENVIRONMENT=Production 
+  -e MYSQL_CONNECTION=""Server=host.docker.internal;Port=3306;Database=clients;User Id=root;Password=local_password;ConvertZeroDateTime=True;SslMode=Disabled"" 
+  -e REDIS_CONNECTION=""host.docker.internal:6379"" 
   backend-api-eds-client:local
-```
+`
 
-### Validar
+## Guia: Crear un nuevo servicio
 
-```powershell
-curl http://localhost:8080/health/live
-```
+Consulta la guia completa en [docs/guia-crear-servicio-completo.md](docs/guia-crear-servicio-completo.md) donde se explica paso a paso como crear un servicio completo usando **Product** como ejemplo.
 
-Otros endpoints utiles:
+Resumen de archivos a crear para una nueva entidad (ej: Category):
 
-- `http://localhost:8080/scalar/v1` - documentacion interactiva
-- `http://localhost:8080/openapi/v1.json` - spec OpenAPI
-- `http://localhost:8080/api/v1/client/document-type` - requiere header `Authorization: Bearer <token>`
-
-### Operacion del contenedor
-
-```powershell
-docker logs -f backend-api-eds-client          # seguir logs
-docker exec -it backend-api-eds-client bash    # entrar al contenedor
-docker stop backend-api-eds-client             # detener
-docker rm backend-api-eds-client               # eliminar
-```
-
-## CI/CD
-
-El flujo principal esta en `.github/workflows/deploy-client-api.yml`.
-
-Resumen:
-
-- Restaura, compila y ejecuta pruebas con .NET `10.0.x`.
-- Construye una imagen Docker.
-- Publica la imagen en Amazon ECR.
-- Despliega el servicio de desarrollo en AWS ECS.
-
-El workflow se ejecuta en pushes a ramas configuradas y pull requests hacia `main`, `release/*` o `releasecandidate/*`.
-
-## Notas de mantenimiento
-
-- `DocumentCountry` existe en los comandos y entidades, pero `ClientDbContext` lo ignora temporalmente para `ClientNaturalPosEntity` y `ClientLegalPosEntity`. Hasta que la base de datos tenga esas columnas, el valor puede recibirse por API pero no se persiste.
-- `WorkerServiceBilling` y algunos proyectos externos contienen referencias a namespaces/proyectos `Backend.PriceComparison.*`. Revisa esas referencias antes de agregarlos a la solucion principal o al pipeline.
-- Los tests actuales son esqueletos basicos. Conviene agregar pruebas reales para comandos, queries, servicios de dominio, middleware de token y health checks.
-- `appsettings.json` contiene claves de configuracion sensibles. La recomendacion operativa es mover secretos a variables de entorno, User Secrets o un gestor de secretos.
+| Capa | Archivo | Proposito |
+| --- | --- | --- |
+| Domain | Entities/CategoryEntity.cs | Entidad. |
+| Domain | Ports/ICategoryRepository.cs | Interface del repositorio (puerto). |
+| Application | Dtos/CategoryDto.cs | DTO de respuesta. |
+| Application | Queries/Category/GetAllCategoriesQuery.cs | Query. |
+| Application | Queries/Category/GetAllCategoriesQueryHandler.cs | Handler. |
+| Application | Commands/CreateCategory/CreateCategoryCommand.cs | Command. |
+| Application | Commands/CreateCategory/CreateCategoryCommandHandler.cs | Handler. |
+| Application | Commands/CreateCategory/CreateCategoryCommandValidator.cs | Validacion. |
+| Application | Mappers/StoreProfile.cs | Mapping AutoMapper (editar). |
+| Infrastructure | Store/Repositories/CategoryRepository.cs | Implementacion del repositorio. |
+| Infrastructure | DependencyInjectionService.cs | Registrar repositorio (editar). |
+| API | Endpoints/CategoryEndpoints.cs | Endpoints. |
+| API | Program.cs | Registrar endpoints (editar). |
