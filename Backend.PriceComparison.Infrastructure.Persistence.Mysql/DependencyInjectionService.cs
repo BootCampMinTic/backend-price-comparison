@@ -8,6 +8,7 @@ using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter.Cache;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Adapter;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Configuration;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Store.Repositories;
+
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context;
 using Backend.PriceComparison.Infrastructure.Persistence.Mysql.Mock;
 using StackExchange.Redis;
@@ -63,6 +64,8 @@ public static class DependencyInjectionService
         });
 
         services.AddSingleton<IMessageProvider, MessageProvider>();
+
+        services.AddScoped<ISaleRepository, SaleRepository>();
 
         return services;
     }
