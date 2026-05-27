@@ -83,6 +83,7 @@ app.UseMiddleware<BearerTokenMiddleware>();
 app.MapHealthApiEndpoints();
 
 app.MapProductEndpoints();
+app.MapSaleEndpoints();
 app.Run();
 
 public partial class Program { }
