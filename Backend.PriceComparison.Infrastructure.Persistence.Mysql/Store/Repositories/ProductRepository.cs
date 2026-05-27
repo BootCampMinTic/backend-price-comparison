@@ -24,6 +24,10 @@ internal sealed class ProductRepository(
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
+
+
+
+
         if (entities.Count == 0)
         {
             logger.LogDebug("No products found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
