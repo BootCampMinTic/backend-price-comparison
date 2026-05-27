@@ -423,3 +423,7 @@ FodyWeavers.xsd
 
 # opencode workspace config (may contain credentials)
 opencode.json
+# kiro
+.config.kiro
+requirements.md
+API_DOCUMENTATION.md
