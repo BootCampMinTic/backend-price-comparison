@@ -6,7 +6,9 @@ namespace Backend.PriceComparison.Domain.Ports;
 
 public interface ICategoryStoreRepository
 {
-    Task<Result<IEnumerable<CategoryStoreEntity>, Error>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Result<IEnumerable<CategoryStoreEntity>, Error>> GetAllAsync( int pageNumber, int pageSize, CancellationToken cancellationToken);
     Task<Result<CategoryStoreEntity, Error>> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<Result<VoidResult, Error>> CreateAsync(CategoryStoreEntity entity, CancellationToken cancellationToken);
+    Task<Result<VoidResult, Error>> UpdateAsync(CategoryStoreEntity entity, CancellationToken cancellationToken);
+    Task<Result<VoidResult, Error>> DeleteAsync(int id, CancellationToken cancellationToken);
 }
