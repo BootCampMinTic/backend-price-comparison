@@ -5,7 +5,7 @@ using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Store.Entities;
 using Backend.PriceComparison.Domain.Ports;
-namespace Backend.PriceComparison.Application.Store.Commands.CreateCategoryProduct;
+namespace Backend.PriceComparison.Application.Store.Commands.CreateProduct.CreateCategoryProduct;
 public sealed class CreateCategoryProductCommandHandler(
     ICategoryProductRepository _categoryProductRepository,
     IMapper _mapper,

@@ -1,5 +1,5 @@
 using FluentValidation;
-namespace Backend.PriceComparison.Application.Store.Commands.CreateCategoryProduct;
+namespace Backend.PriceComparison.Application.Store.Commands.CreateProduct.CreateCategoryProduct;
 public class CreateCategoryProductCommandValidator : AbstractValidator<CreateCategoryProductCommand>
 {
     public CreateCategoryProductCommandValidator()
