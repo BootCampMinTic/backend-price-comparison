@@ -64,6 +64,8 @@ public static class DependencyInjectionService
 
         services.AddSingleton<IMessageProvider, MessageProvider>();
 
+        services.AddScoped<IProductRepository, ProductRepository>();
+
         return services;
     }
 }
