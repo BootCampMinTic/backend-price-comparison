@@ -70,6 +70,10 @@ public static class DependencyInjectionService
         // Register repositories
         services.AddScoped<IProductRepository, ProductRepository>();
 
+        // Category repositories (swap mocks for real implementations once available)
+        services.AddScoped<ICategoryProductRepository, MockCategoryProductRepository>();
+        services.AddScoped<ICategoryStoreRepository, MockCategoryStoreRepository>();
+
         return services;
     }
 }

@@ -11,4 +11,13 @@ public static class CacheKeys
 
     public static string SaleById(int id) => $"sale:{id}";
     public static string SalesPage(int pageNumber, int pageSize) => $"{SalesPrefix}:page:{pageNumber}:size:{pageSize}";
+
+    public const string CategoryProductPrefix = "categories:product";
+    public const string CategoryStorePrefix = "categories:store";
+
+    public static string CategoryProductById(int id) => $"category:product:{id}";
+    public static string CategoryProductPage(int pageNumber, int pageSize) => $"{CategoryProductPrefix}:page:{pageNumber}:size:{pageSize}";
+
+    public static string CategoryStoreById(int id) => $"category:store:{id}";
+    public static string CategoryStorePage(int pageNumber, int pageSize) => $"{CategoryStorePrefix}:page:{pageNumber}:size:{pageSize}";
 }

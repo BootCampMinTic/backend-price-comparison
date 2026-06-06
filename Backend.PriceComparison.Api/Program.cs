@@ -84,6 +84,7 @@ app.MapHealthApiEndpoints();
 
 app.MapProductEndpoints();
 app.MapSaleEndpoints();
+app.MapCategoryEndpoints();
 app.Run();
 
 public partial class Program { }

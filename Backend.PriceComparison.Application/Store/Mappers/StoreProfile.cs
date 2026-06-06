@@ -1,6 +1,10 @@
 using AutoMapper;
+using Backend.PriceComparison.Application.Store.Commands.CreateCategoryProduct;
+using Backend.PriceComparison.Application.Store.Commands.CreateCategoryStore;
 using Backend.PriceComparison.Application.Store.Commands.CreateProduct;
 using Backend.PriceComparison.Application.Store.Commands.CreateSale;
+using Backend.PriceComparison.Application.Store.Commands.UpdateCategoryProduct;
+using Backend.PriceComparison.Application.Store.Commands.UpdateCategoryStore;
 using Backend.PriceComparison.Application.Store.Dtos;
 using Backend.PriceComparison.Domain.Store.Entities;
 
@@ -23,5 +27,8 @@ public class StoreProfile : Profile
 
         CreateMap<CreateSaleCommand, SaleEntity>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<CategoryProductEntity, CategoryProductDto>();
+        CreateMap<CategoryStoreEntity, CategoryStoreDto>();
     }
 }
