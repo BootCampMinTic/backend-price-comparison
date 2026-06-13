@@ -9,6 +9,7 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
         public DbSet<CategoryStoreEntity> CategoryStores { get; set; }
         public DbSet<StoreEntity> Stores { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,6 +54,18 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
                 entity.Property(e => e.CategoryProductId).HasColumnName("id_category_product");
                 entity.HasOne(e => e.Store).WithMany().HasForeignKey(e => e.StoreId);
                 entity.HasOne(e => e.CategoryProduct).WithMany().HasForeignKey(e => e.CategoryProductId);
+            });
+
+            modelBuilder.Entity<UserEntity>(entity =>
+            {
+                entity.ToTable("user");
+                entity.Property(e => e.Id).HasColumnName("id_user");
+                entity.Property(e => e.Name).HasColumnName("name");
+                entity.Property(e => e.Email).HasColumnName("email");
+                entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+                entity.Property(e => e.Role).HasColumnName("role");
+                entity.Property(e => e.IsActive).HasColumnName("is_active");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             });
         }
     }
