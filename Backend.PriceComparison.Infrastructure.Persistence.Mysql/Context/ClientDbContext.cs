@@ -14,6 +14,7 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<SaleEntity> Sales { get; set; }
         public DbSet<ProductSaleEntity> ProductSales { get; set; }
+        public DbSet<PriceHistoryEntity> PriceHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -105,6 +106,18 @@ namespace Backend.PriceComparison.Infrastructure.Persistence.Mysql.Context
                 entity.Property(e => e.ProductId).HasColumnName("id_product");
                 entity.Property(e => e.SaleId).HasColumnName("id_sale");
                 entity.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId);
+            });
+
+            modelBuilder.Entity<PriceHistoryEntity>(entity =>
+            {
+                entity.ToTable("price_history");
+                entity.Property(e => e.Id).HasColumnName("id_price_history");
+                entity.Property(e => e.ProductId).HasColumnName("id_product");
+                entity.Property(e => e.StoreId).HasColumnName("id_store");
+                entity.Property(e => e.Price).HasColumnName("price");
+                entity.Property(e => e.Date).HasColumnName("date");
+                entity.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId);
+                entity.HasOne(e => e.Store).WithMany().HasForeignKey(e => e.StoreId);
             });
         }
     }

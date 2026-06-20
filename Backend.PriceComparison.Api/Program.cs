@@ -87,6 +87,7 @@ app.MapCategoryProductEndpoints();
 app.MapCategoryStoreEndpoints();
 app.MapStoreEndpoints();
 app.MapProductEndpoints();
+app.MapPriceHistoryEndpoints();
 app.MapUserEndpoints();
 app.MapSaleEndpoints();
 

@@ -5,6 +5,7 @@ using Backend.PriceComparison.Application.Store.Commands.CreateProduct;
 using Backend.PriceComparison.Application.Store.Commands.CreateSale;
 using Backend.PriceComparison.Application.Store.Commands.CreateStore;
 using Backend.PriceComparison.Application.Store.Commands.CreateUser;
+using Backend.PriceComparison.Application.Store.Commands.RegisterPrice;
 using Backend.PriceComparison.Application.Store.Dtos;
 using Backend.PriceComparison.Domain.Store.Entities;
 
@@ -59,5 +60,14 @@ public class StoreProfile : Profile
             .ForMember(dest => dest.Store, opt => opt.Ignore())
             .ForMember(dest => dest.State, opt => opt.Ignore())
             .ForMember(dest => dest.ProductSales, opt => opt.Ignore());
+
+        CreateMap<PriceHistoryEntity, PriceHistoryDto>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product != null ? src.Product.Name : null))
+            .ForMember(dest => dest.StoreName, opt => opt.MapFrom(src => src.Store != null ? src.Store.Name : null));
+
+        CreateMap<RegisterPriceCommand, PriceHistoryEntity>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Product, opt => opt.Ignore())
+            .ForMember(dest => dest.Store, opt => opt.Ignore());
     }
 }
