@@ -5,7 +5,5 @@ using Backend.PriceComparison.Application.Store.Dtos;
 
 namespace Backend.PriceComparison.Application.Store.Queries.CategoryStore;
 
-/// <summary>
-/// Query to retrieve all category stores.
-/// </summary>
-public record GetAllCategoryStoresQuery : IRequest<Result<IEnumerable<CategoryStoreDto>, Error>>;
+public sealed record GetAllCategoryStoresQuery(int PageNumber = 1, int PageSize = 10)
+    : IRequest<Result<IEnumerable<CategoryStoreDto>, Error>>;

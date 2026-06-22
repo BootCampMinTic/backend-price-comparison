@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Backend.PriceComparison.Application.Common;
 using Backend.PriceComparison.Domain.Common.Results;
@@ -8,26 +9,26 @@ using Backend.PriceComparison.Domain.Ports;
 namespace Backend.PriceComparison.Application.Store.Queries.CategoryProduct;
 
 public sealed class GetAllCategoryProductsQueryHandler(
-    ICategoryProductRepository _categoryProductRepository,
-    ICacheService _cacheService)
+    ICategoryProductRepository categoryProductRepository,
+    IMapper mapper,
+    ICacheService cacheService)
     : IRequestHandler<GetAllCategoryProductsQuery, Result<IEnumerable<CategoryProductDto>, Error>>
 {
-    private const string CacheKey = CacheKeys.CategoryProductsAll;
-
     public async Task<Result<IEnumerable<CategoryProductDto>, Error>> Handle(
         GetAllCategoryProductsQuery request,
         CancellationToken cancellationToken)
     {
-        var cached = await _cacheService.GetAsync<IEnumerable<CategoryProductDto>>(CacheKey, cancellationToken);
+        var cacheKey = CacheKeys.CategoryProductPage(request.PageNumber, request.PageSize);
+        var cached = await cacheService.GetAsync<IEnumerable<CategoryProductDto>>(cacheKey, cancellationToken);
         if (cached is not null)
             return cached.ToList();
 
-        var result = await _categoryProductRepository.GetAllAsync(cancellationToken);
+        var result = await categoryProductRepository.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
         if (!result.IsSuccess)
             return result.Error!;
 
-        var dtos = result.Value!.Select(e => new CategoryProductDto { Id = e.Id, Description = e.Description }).ToList();
-        await _cacheService.SetAsync(CacheKey, dtos, expiration: null, cancellationToken);
-        return dtos;
+        var dtos = mapper.Map<IEnumerable<CategoryProductDto>>(result.Value!);
+        await cacheService.SetAsync(cacheKey, dtos, expiration: null, cancellationToken);
+        return dtos.ToList();
     }
 }

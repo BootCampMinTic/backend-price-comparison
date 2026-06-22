@@ -18,19 +18,13 @@ internal sealed class SaleRepository(
     {
         var entities = await _context.Sales
             .AsNoTracking()
-            .Include(s => s.User)
-            .Include(s => s.Store)
-            .Include(s => s.State)
-            .Include(s => s.ProductSales)
-                .ThenInclude(ps => ps.Product)
-            .OrderByDescending(s => s.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
         if (entities.Count == 0)
         {
-            logger.LogDebug("No sales found for page {PageNumber} size {PageSize}", pageNumber, pageSize);
+            logger.LogDebug("No sales found");
             return StoreErrorBuilder.NoRecordsFound("sale");
         }
 
@@ -41,18 +35,10 @@ internal sealed class SaleRepository(
     {
         var entity = await _context.Sales
             .AsNoTracking()
-            .Include(s => s.User)
-            .Include(s => s.Store)
-            .Include(s => s.State)
-            .Include(s => s.ProductSales)
-                .ThenInclude(ps => ps.Product)
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
         if (entity is null)
-        {
-            logger.LogDebug("Sale not found by id {SaleId}", id);
             return StoreErrorBuilder.NotFound(id, "Sale");
-        }
 
         return entity;
     }
@@ -63,12 +49,8 @@ internal sealed class SaleRepository(
         var saved = await _context.SaveChangesAsync(cancellationToken) > 0;
 
         if (!saved)
-        {
-            logger.LogWarning("Failed to persist sale");
             return StoreErrorBuilder.CreationFailed("sale");
-        }
 
-        logger.LogInformation("Sale created with id {SaleId}", entity.Id);
         return VoidResult.Instance;
     }
 }

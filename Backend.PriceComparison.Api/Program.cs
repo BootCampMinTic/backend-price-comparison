@@ -82,14 +82,9 @@ app.UseMiddleware<BearerTokenMiddleware>();
 // Map Minimal API endpoints
 app.MapHealthApiEndpoints();
 
-app.MapCatalogEndpoints();
-app.MapCategoryProductEndpoints();
-app.MapCategoryStoreEndpoints();
-app.MapStoreEndpoints();
 app.MapProductEndpoints();
-app.MapUserEndpoints();
 app.MapSaleEndpoints();
-
+app.MapCategoryEndpoints();
 app.Run();
 
 public partial class Program { }

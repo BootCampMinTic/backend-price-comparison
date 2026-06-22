@@ -4,6 +4,4 @@ using Backend.PriceComparison.Domain.Common.Results.Errors;
 
 namespace Backend.PriceComparison.Application.Store.Commands.CreateCategoryProduct;
 
-public record CreateCategoryProductCommand(
-    string Description
-) : IRequest<Result<VoidResult, Error>>;
+public sealed record CreateCategoryProductCommand(string Description) : IRequest<Result<VoidResult, Error>>;

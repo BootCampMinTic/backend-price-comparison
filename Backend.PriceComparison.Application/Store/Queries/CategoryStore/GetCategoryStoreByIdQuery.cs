@@ -5,7 +5,5 @@ using Backend.PriceComparison.Application.Store.Dtos;
 
 namespace Backend.PriceComparison.Application.Store.Queries.CategoryStore;
 
-/// <summary>
-/// Query to retrieve a category store by its identifier.
-/// </summary>
-public record GetCategoryStoreByIdQuery(int Id) : IRequest<Result<CategoryStoreDto, Error>>;
+public sealed record GetCategoryStoreByIdQuery(int Id)
+    : IRequest<Result<CategoryStoreDto, Error>>;

@@ -5,19 +5,19 @@ using Backend.PriceComparison.Domain.Common.Results.Errors;
 using Backend.PriceComparison.Domain.Store.Entities;
 using Backend.PriceComparison.Domain.Ports;
 
-namespace Backend.PriceComparison.Application.Store.Commands.CreateCategoryStore;
+namespace Backend.PriceComparison.Application.Store.Commands.UpdateCategoryStore;
 
-public sealed class CreateCategoryStoreCommandHandler(
+public sealed class UpdateCategoryStoreCommandHandler(
     ICategoryStoreRepository categoryStoreRepository,
     ICacheService cacheService)
-    : IRequestHandler<CreateCategoryStoreCommand, Result<VoidResult, Error>>
+    : IRequestHandler<UpdateCategoryStoreCommand, Result<VoidResult, Error>>
 {
     public async Task<Result<VoidResult, Error>> Handle(
-        CreateCategoryStoreCommand request,
+        UpdateCategoryStoreCommand request,
         CancellationToken cancellationToken)
     {
-        var entity = new CategoryStoreEntity { Description = request.Description };
-        var result = await categoryStoreRepository.CreateAsync(entity, cancellationToken);
+        var entity = new CategoryStoreEntity { Id = request.Id, Description = request.Description };
+        var result = await categoryStoreRepository.UpdateAsync(entity, cancellationToken);
 
         if (!result.IsSuccess)
             return result.Error!;

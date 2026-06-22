@@ -5,7 +5,6 @@ using Backend.PriceComparison.Api.Common.Wrappers;
 using Backend.PriceComparison.Application.Store.Commands.CreateSale;
 using Backend.PriceComparison.Application.Store.Dtos;
 using Backend.PriceComparison.Application.Store.Queries.Sale;
-using System.Net;
 using Backend.PriceComparison.Domain.Common.Results;
 using Backend.PriceComparison.Domain.Common.Results.Errors;
 
@@ -27,7 +26,7 @@ public static class SaleEndpoints
 
         group.MapGet("sales/{id:int}", GetSaleById)
             .WithName("GetSaleById")
-            .WithSummary("Get sale by ID with product details")
+            .WithSummary("Get sale by ID")
             .Produces<SaleDto>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
             .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
@@ -35,7 +34,7 @@ public static class SaleEndpoints
 
         group.MapPost("sales", CreateSale)
             .WithName("CreateSale")
-            .WithSummary("Create a new sale with products")
+            .WithSummary("Create a new sale")
             .Produces<ApiResponse<object>>(StatusCodes.Status200OK)
             .Produces<ApiResponse<object>>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status401Unauthorized)
